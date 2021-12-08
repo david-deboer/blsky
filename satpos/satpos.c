@@ -371,10 +371,10 @@ int readLocation(struct observer *obs)
   char line[120], code[20], tmpLat[20], tmpLng[20];
   FILE *fp;
 
-  fp = fopen("obs.dat","r");
+  fp = fopen("satpos.obs","r");
   if (fp==NULL)
   {
-    printf("obs.dat not found.\n");
+    printf("satpos.obs not found.\n");
     return 0;
   }
 
