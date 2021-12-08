@@ -1,3 +1,5 @@
+blsky contains modules to investigate technosignature observing.  This primarily relates to rfi and drift.
+
 satpos  implements the sgp4 orbital tracking code (get ref to where the actual c code came from) and some other modules to look at the data.
 
 The TLE files are maintained /tle and may be updated using the script 'updatetle.py' while in that directory.  Note that when updated should git commit -am 'TLE update on YY-MM-DD' so that old ones may be found via git log.

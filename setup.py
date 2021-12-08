@@ -7,15 +7,15 @@ from setuptools import setup
 import glob
 
 setup_args = {
-    'name': "myobs",
+    'name': "blsky",
     'description': "various routines for observing etc",
     'license': "BSD",
     'author': "David DeBoer",
     'author_email': "ddeboer@berkeley.edu",
     'version': '0.1',
     'scripts': glob.glob('scripts/*'),
-    'packages': ['myobs'],
-    # 'package_data': {"myobs": ["data/*"]}
+    'packages': ['blsky'],
+    # 'package_data': {"blsky": ["data/*"]}
 }
 
 if __name__ == '__main__':

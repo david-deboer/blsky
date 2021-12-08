@@ -3,4 +3,7 @@ from os import path
 import shutil
 
 
-shutil.copy('src/satpos', path.dirname(__file__))
+print("Check that cwd endswith blsky")
+shutil.copy('blsky/satpos/satpos', path.dirname(__file__))
+shutil.copy('blsky/satpos.obs', path.dirname(__file__))
+shutil.copy('blsky/satpos.cfg', path.dirname(__file__))

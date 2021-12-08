@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-from myobs import satcensus
+from blsky import satcensus
 import argparse
 
 ap = argparse.ArgumentParser()

@@ -1,5 +1,5 @@
 #!/bin/bash
-cd ~/myobs
+cd blsky
 git add tle
 CURRENTDATE=`date +"%Y-%m-%d %T"`
 GCOMMSG='git commit -m "TLE update '$CURRENTDATE'"'
