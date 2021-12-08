@@ -19,7 +19,8 @@ struct satTime {
 struct observer {
 	char Name[12];
 	char Code[8];
-    char TLEpath[80];
+  char TLEpath[80];
+	char datafile[100];
 	double lat;
 	double lng;
 	double alt;

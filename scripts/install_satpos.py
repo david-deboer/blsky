@@ -5,7 +5,7 @@ import shutil
 
 if getcwd().endswith('blsky'):
     shutil.copy('satpos/satpos', path.dirname(__file__))
-    shutil.copy('satpos.obs', path.dirname(__file__))
-    shutil.copy('satpos.cfg', path.dirname(__file__))
 else:
     print("Must be in blsky directory.")
+
+print("Run satpos in a directory containing satpos.obs and satpos.cfg.")

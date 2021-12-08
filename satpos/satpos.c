@@ -243,6 +243,16 @@ int readObserver(struct observer *obs)
   }
   sscanf(line,"%s",obs->TLEpath);
 
+  //get observatory data filename
+  commentLine = 1;
+  while (commentLine)
+  {
+    getline(fp,line,299);
+    if (line[0] != '#')
+      commentLine = 0;
+  }
+  sscanf(line, "%s", obs->datafile);
+
     //obs_to_use daylight_savings_time
   commentLine = 1;
   while (commentLine)
@@ -371,10 +381,10 @@ int readLocation(struct observer *obs)
   char line[120], code[20], tmpLat[20], tmpLng[20];
   FILE *fp;
 
-  fp = fopen("satpos.obs","r");
+  fp = fopen(obs->datafile, "r");
   if (fp==NULL)
   {
-    printf("satpos.obs not found.\n");
+    printf("%s not found.\n", obs->datafile);
     return 0;
   }
 
