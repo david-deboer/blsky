@@ -1,9 +1,11 @@
 #! /usr/bin/env python
-from os import path
+from os import path, getcwd
 import shutil
 
 
-print("Check that cwd endswith blsky")
-shutil.copy('blsky/satpos/satpos', path.dirname(__file__))
-shutil.copy('blsky/satpos.obs', path.dirname(__file__))
-shutil.copy('blsky/satpos.cfg', path.dirname(__file__))
+if getcwd().endswith('blsky'):
+    shutil.copy('satpos/satpos', path.dirname(__file__))
+    shutil.copy('satpos.obs', path.dirname(__file__))
+    shutil.copy('satpos.cfg', path.dirname(__file__))
+else:
+    print("Must be in blsky directory.")
