@@ -17,3 +17,12 @@ reads in the .out files from above and computes various parameters.
 --satcensus--
 from satpos import satcensus
 random modules using sattrack (or not) to look at satellite data.
+
+
+How-to
+======
+1 - make sure TLE files in tle_archive are what you want
+2 - run satpos_script.py <filename>.tle to generate a shell script for satpos (<filename>=>active)
+    writes:  satpos_<filename>.sh:  script for satpos (chmod u+x)
+             sp<filename>.list:  used by find_viewable
+3 - ?satcensus.find_viewable?

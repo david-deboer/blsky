@@ -1,7 +1,7 @@
 """Miscellaneous collection of modules to count satellite/etc"""
 from argparse import Namespace
 from . import sattrack
-from os.path import join
+import os.path as op
 
 
 def filter_drift(f=982e6, rng=[0.025, 0.05], absvalue=True,
@@ -25,7 +25,7 @@ def filter_drift(f=982e6, rng=[0.025, 0.05], absvalue=True,
             fname = data[0]
             if addtag is not None:
                 fname = f"{fname}.{addtag}"
-            fname = join(path, fname)
+            fname = op.join(path, fname)
             s = sattrack.Track(fname)
             s.view(loc)
             s.rates(f)
@@ -84,7 +84,7 @@ def showdist():
     notv.zmax = np.array(notv.zmax)
 
 
-def find_viewable(loc, trackfilelist='spactive.list', path='output', verbose=False):
+def find_viewable(loc, trackfilelist='spactive.list', path='', verbose=False):
     """
     Run satpos over the desired TLEs ('satpos active 1', ...)
     and ls that list in the path.
@@ -105,7 +105,7 @@ def find_viewable(loc, trackfilelist='spactive.list', path='output', verbose=Fal
             fname = line.strip()
             if verbose:
                 print(f"Reading {fname}")
-            s = sattrack.Track(join(path, fname))
+            s = sattrack.Track(op.join(path, fname))
             s.view(loc)
             if s.period > 1500.0:
                 count.deep += 1
@@ -149,13 +149,30 @@ def find_viewable(loc, trackfilelist='spactive.list', path='output', verbose=Fal
     print(f"NOTVIEWABLE: {count.notviewable}")
 
 
-def satpos_script(tlefile):
+satpos_cfg = {1: 'tlepath', 2: 'obsfile', 3: 'obs', 4: 'torigin', 5: 'start', 6: 'stop', 7: 'step'}
+
+
+def satpos_script(tlefile, cfgfile='satpos.cfg'):
     """
     Write a bash script to check entry numbers within a tle file repetitiously via satpos.
+
+    Also writes a .list file for find_viewable.
     """
+    scfg = {}
+    with open(cfgfile, 'r') as fp:
+        i = 1
+        for line in fp:
+            if line[0] != '#':
+                data = line.strip().split()
+                if len(data) > 1:
+                    scfg[satpos_cfg[i]] = data
+                else:
+                    scfg[satpos_cfg[i]] = line.strip()
+                i += 1
     if '.' not in tlefile:
         tlefile = f"{tlefile}.tle"
     tprename = tlefile.split('.')[0]
+    tlefile = op.join(scfg['tlepath'], tlefile)
     tot = 0
     with open(tlefile, 'r') as fp:
         for line in fp:
@@ -163,9 +180,11 @@ def satpos_script(tlefile):
     tot = int(tot / 3.0)
     outfile = f'satpos_{tprename}.sh'
     print(f"Writing {tot} entries to {outfile}.")
-    with open(outfile, 'w') as fp:
-        for i in range(tot):
-            print(f"satpos {tprename} {i+1}", file=fp)
+    with open(f"sp{tprename}.list", "w") as splistfp:
+        with open(outfile, 'w') as fp:
+            for i in range(tot):
+                print(f"satpos {tprename} {i+1}", file=fp)
+                print(f"sp{tprename}{i+1:04d}.out", file=splistfp)
 
 
 def generate_complete_set(epoch=None, path='tle', fmname='master.dat'):
@@ -173,14 +192,13 @@ def generate_complete_set(epoch=None, path='tle', fmname='master.dat'):
     Goes through all tle files to find unique satellites and produce a completeset.
     [N.B. should use most recent epoch -- currently doesn't check that.]
     """
-    import os.path
     satellites = {}
     sats_by_file = {}
     total_count = 0
-    flistname = os.path.join(path, fmname)
+    flistname = op.join(path, fmname)
     with open(flistname, 'r') as fp:
         for line in fp:
-            fname = os.path.join(path, f"{line.strip().split(':')[0]}")
+            fname = op.join(path, f"{line.strip().split(':')[0]}")
             sats_by_file[fname] = []
             with open(fname, 'r') as fptle:
                 for tleline in fptle:
