@@ -125,7 +125,7 @@ def find_viewable(loc, trackfilelist='spactive.list', path='', verbose=False):
             try:
                 zamin = s.za.min()
                 zamax = s.za.max()
-            except ValueError:
+            except (ValueError, AttributeError):
                 zamin = '!'
                 zamax = '!'
             fnp = fname.split('.')[0]
