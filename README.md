@@ -2,9 +2,7 @@ blsky contains modules to investigate technosignature observing.  This primarily
 
 satpos  implements the sgp4 orbital tracking code (http://www.astrodynamicstandards.com/sgp4/) and some other code to prep the data.
 
-The TLE files are maintained in the /tle subdirectory and may be updated using the script 'updatetle.py' while in that directory.  There is a branch of this repo called tle\_archive, so please update
-
-Note that when updated should git commit -am 'TLE update on YY-MM-DD' so that old ones may be found via git log.  There is a special branch in the repo where
+The TLE files are maintained in the /tle subdirectory and may be updated using the script 'updatetle.py' while in that directory.  There is a branch of this repo called tle_archive, so please update in that branch as well as the main branch.  Use a commit message of the form `TLE update 2021-12-15 11:50:10`.  The tle_archive branch gets updated weekly on Sunday night.  DO NOT MERGE THE tle_archive BRANCH WITH MAIN!  (I intend to write up modules to pull archived tles out.)
 
 --satpos--
 Given TLE (from a file, location set in satpos.cfg) it writes a file:
