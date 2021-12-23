@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # -*- mode: python; coding: utf-8 -*-
-# Copyright 2019 David DeBoer
+# Copyright 2021 David DeBoer
 # Licensed under the 2-clause BSD license.
 
 from setuptools import setup

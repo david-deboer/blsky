@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
   getgravconst(whichconst, tumin, mu, radiusearthkm, xke, j2, j3, j4, j3oj2);
 
   // ---------------- setup files for operation ------------------
-  sprintf(outname, "sp%s%04d.out", TLEprefix, k);
+  sprintf(outname, "sp_%s%04d.out", TLEprefix, k);
   outfile = fopen(outname, "w");
 
   // convert the char string to sgp4 elements
