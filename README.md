@@ -5,8 +5,8 @@ satpos  implements the sgp4 orbital tracking code (http://www.astrodynamicstanda
 The TLE files are maintained in the /tle subdirectory and may be updated using the script 'updatetle.py' while in that directory.  There is a branch of this repo called tle_archive, so please update in that branch as well as the main branch.  Use a commit message of the form `TLE update 2021-12-15 11:50:10`.  The tle_archive branch gets updated weekly on Sunday night.  DO NOT MERGE THE tle_archive BRANCH WITH MAIN!  (I intend to write up modules to pull archived tles out.)
 
 --satpos--
-Given TLE (from a file, location set in satpos.cfg) it writes a file:
-    'sp{filename}{entry_number_in_file:04d}.out' which contains a track over the period specified in satpos.cfg (which must be in that directory)
+Given TLE (from a file, location set in satpos_cfg.yaml) it writes a file:
+    'sp_{filename}{entry_number_in_file:04d}.out' which contains a track over the period specified in satpos.cfg (which must be in that directory)
 e.g. satpos active 123
 
 

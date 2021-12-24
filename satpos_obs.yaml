@@ -1,0 +1,136 @@
+__include: all
+__exclude: AR
+__columns: location,lat,lng,alt,horizon,tz
+__label:
+  alt: '8|c|Altitude|m'
+  horizon: '7|c|Horizon|deg'
+  lat: '12|l|Latitude|d:m:s'
+  lng: '13|l|Longitude|d:m:s'
+  location: '20|l|Location'
+  tz: '3|c|Timezone|hr E'
+AR:
+  alt: '497'
+  horizon: '10'
+  lat: '18:20:36.60'
+  lng: '-66:45:11.10'
+  location: Arecibo,PR
+  tz: '0'
+ATA:
+  alt: '1022'
+  horizon: '10'
+  lat: '40.817361'
+  lng: '-121.4718027'
+  location: HCRO
+  tz: '-8'
+BR:
+  alt: '250'
+  horizon: '10'
+  lat: '48:07:52.42'
+  lng: '-119:40:59.80'
+  location: Brewster,WA
+  tz: '-8'
+CIT:
+  alt: '1222'
+  horizon: '10'
+  lat: '37:14:02'
+  lng: '-118:16:56'
+  location: OVRO
+  tz: '-8'
+EB:
+  alt: '319'
+  horizon: '10'
+  lat: '50:31:30'
+  lng: '6:53:00.3'
+  location: Effelsberg,Germany
+  tz: '0'
+FD:
+  alt: '1606'
+  horizon: '10'
+  lat: '30:38:06.11'
+  lng: '-103:56:41.34'
+  location: Fort_Davis,TX
+  tz: '0'
+GB:
+  alt: '807'
+  horizon: '10'
+  lat: '38:25:59.24'
+  lng: '-79:50:23.41'
+  location: Green_Bank,WV
+  tz: '-5'
+GDSCC:
+  alt: '747'
+  horizon: '10'
+  lat: '35:25:36'
+  lng: '-116:53:24'
+  location: Goldstone
+  tz: '-8'
+HN:
+  alt: '296'
+  horizon: '10'
+  lat: '42:56:00.99'
+  lng: '-71:59:11.69'
+  location: Hancock,NH
+  tz: '0'
+KP:
+  alt: '1902'
+  horizon: '10'
+  lat: '31:57:22.70'
+  lng: '-111:36:44.72'
+  location: Kitt_Peak,AZ
+  tz: '0'
+LA:
+  alt: '1962'
+  horizon: '10'
+  lat: '35:46:30.45'
+  lng: '-106:14:44.15'
+  location: Los_Alamos,NM
+  tz: '-7'
+MK:
+  alt: '3763'
+  horizon: '10'
+  lat: '19:48:04.97'
+  lng: '-155:27:19.81'
+  location: Mauna_Kea,HI
+  tz: '0'
+NL:
+  alt: '222'
+  horizon: '10'
+  lat: '41:46:17.13'
+  lng: '-91:34:26.88'
+  location: North_Liberty,IA
+  tz: '0'
+OV:
+  alt: '1196'
+  horizon: '10'
+  lat: '37:13:53.95'
+  lng: '-118:16:37.37'
+  location: Owens_Valley,CA
+  tz: '-8'
+PT:
+  alt: '2365'
+  horizon: '10'
+  lat: '34:18:03.61'
+  lng: '-108:07:09.06'
+  location: Pie_Town,NM
+  tz: '-7'
+SC:
+  alt: '16'
+  horizon: '10'
+  lat: '17:45:23.68'
+  lng: '-64:35:01.07'
+  location: Saint_Croix,VI
+  tz: '0'
+UCB:
+  alt: '100'
+  horizon: '10'
+  lat: '37:52:17.72'
+  lng: '-122:16:21.9'
+  location: UCB
+  tz: '-8'
+Y27:
+  alt: '2115'
+  horizon: '10'
+  lat: '34:04:43.75'
+  lng: '-107:37:05.91'
+  location: EVLA,NM
+  tz: '-7'
