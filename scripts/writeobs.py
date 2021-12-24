@@ -6,7 +6,6 @@ class ObsTable:
     def __init__(self, obsfile='satpos_obs.yaml'):
         with open('satpos_obs.yaml', 'r') as fp:
             self.obs = yaml.load(fp, Loader=yaml.Loader)
-
         cull_keys = []
         for key, val in self.obs.items():
             if key.startswith('__'):
@@ -22,57 +21,57 @@ class ObsTable:
             if excl in self.include:
                 self.include.remove(excl)
 
-    def get_header_info(self):
-        self.h_info = {}
+    def get_table_info(self):
+        self.info = {}
         for hdr in self.columns:
-            self.h_info[hdr] = {}
+            self.info[hdr] = {}
             cin = self.label[hdr].split('|')
-            self.h_info[hdr]['width'] = int(cin[0])
-            self.h_info[hdr]['justify'] = cin[1].lower()
-            self.h_info[hdr]['label'] = cin[2]
+            self.info[hdr]['width'] = int(cin[0])
+            self.info[hdr]['justify'] = cin[1].lower()
+            self.info[hdr]['label'] = cin[2]
             try:
-                self.h_info[hdr]['unit'] = cin[3]
+                self.info[hdr]['unit'] = cin[3]
             except IndexError:
-                self.h_info[hdr]['unit'] = ' '
+                self.info[hdr]['unit'] = ' '
 
-    def make_header_line(self, lna, lb, rb):
-        if lna == 'label':
-            header = "#Code \t"
-            lb, rb = '', ''
-        else:
-            header = "#     \t"
-            lb, rb = '[', ']'
-        for hdr in self.columns:
-            val = f"{lb}{self.h_info[hdr][lna]}{rb}"
+    def make_header_lines(self):
+        for lna in ['label', 'unit']:
             if lna == 'label':
-                col = f"{val.ljust(self.h_info[hdr]['width'])}\t"
+                header, lb, rb = "#Code \t", '', ''
             else:
-                col = f"{val.center(self.h_info[hdr]['width'])}\t"
-            header += col
-        return header.rstrip()
+                header, lb, rb = "#     \t", '[', ']'
+            for hdr in self.columns:
+                if len(self.info[hdr][lna].strip()):
+                    val = f"{lb}{self.info[hdr][lna]}{rb}"
+                else:
+                    val = ' '
+                if lna == 'label':
+                    col = f"{val.ljust(self.info[hdr]['width'])}\t"
+                else:
+                    col = f"{val.center(self.info[hdr]['width'])}\t"
+                header += col
+            setattr(self, f"header_{lna}", header.rstrip())
 
     def make_row(self, obs):
         this_line = obs.ljust(6) + '\t'
         for col in self.columns:
-            if self.h_info[col]['justify'] == 'l':
-                val = self.obs[obs][col].ljust(self.h_info[col]['width'])
-            elif self.h_info[col]['justify'] == 'c':
-                val = self.obs[obs][col].center(self.h_info[col]['width'])
-            elif self.h_info[col]['justify'] == 'r':
-                val = self.obs[obs][col].rjust(self.h_info[col]['width'])
-            print(col, self.obs[obs][col], val)
-            this_line += f"{val}\t"
+            if self.info[col]['justify'] == 'l':
+                val = self.obs[obs][col].ljust(self.info[col]['width'])
+            elif self.info[col]['justify'] == 'c':
+                val = self.obs[obs][col].center(self.info[col]['width'])
+            elif self.info[col]['justify'] == 'r':
+                val = self.obs[obs][col].rjust(self.info[col]['width'])
+            this_line += f"{val.replace(' ', '_')}\t"
         return this_line.rstrip()
 
 
 obstab = ObsTable()
-obstab.get_header_info()
-header1 = obstab.make_header_line('label')
-header2 = obstab.make_header_line('unit')
+obstab.get_table_info()
+obstab.make_header_lines()
 
 with open('satpos.obs', 'w') as fp:
-    print(header1, file=fp)
-    print(header2, file=fp)
+    print(obstab.header_label, file=fp)
+    print(obstab.header_unit, file=fp)
     for this_obs in obstab.include:
         row = obstab.make_row(this_obs)
         print(row, file=fp)
