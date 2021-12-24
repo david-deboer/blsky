@@ -204,11 +204,11 @@ int main(int argc, char *argv[])
   return 1;
 }
 
-/* Get observer and date data */
+/* Get observer and date data from config yaml (very picky one...)*/
 int readObserver(struct observer *obs)
 {
-  int commentLine, nconv, timeZone, utcconv;
-  char line[300], code[8], *local_s, tztype[8];
+  int nconv, nsa, nso, timeZone, utcconv, line_len, i;
+  char line[300], code[8], *local_s, tztype[8], line2[200];
   time_t time_now;
   tm *tm_now;
   struct satTime dt;
@@ -227,78 +227,49 @@ int readObserver(struct observer *obs)
     timeZone = timeZone + 24;
 
   ///////////  Read input file
-  fp=fopen("satpos.cfg","r");
+  fp=fopen("satpos_cfg.yaml", "r");
   if (fp==NULL)
   {
-    printf("satpos.cfg not found.\n");
+    printf("satpos_cfg.yaml not found.\n");
     exit(1);
   }
-  //get tle path
-  commentLine = 1;
-  while (commentLine)
+  line_len = getline(fp, line, 299);
+  while (line_len > 1)
   {
-    getline(fp,line,299);
-    if (line[0] != '#')
-      commentLine = 0;
+    if (strncmp(line, "  path_to_tle_files:", 20) == 0)
+      sscanf(line+21, "%s", obs->TLEpath);
+    else if (strncmp(line, "  obs_file_to_use:", 18) == 0)
+      sscanf(line+19, "%s", obs->datafile);
+    else if (strncmp(line, "  obs_to_use:", 13) == 0)
+      sscanf(line+14, "%s", obs->Code);
+    else if (strncmp(line, "  daylight_savings_time:", 24) == 0)
+      sscanf(line+25, "%d", &(obs->daylightSavings));
+    else if (strncmp(line, "  time_basis:", 13) == 0)
+      sscanf(line+14, "%s", tztype);
+    else if (strncmp(line, "  start:", 8) == 0)
+      nsa = sscanf(line+9,"%d %d %d %d %d %lf",&(obs->tstart.Year),&(obs->tstart.Month),&(obs->tstart.Day),&(obs->tstart.Hour),&(obs->tstart.Minute),&(obs->tstart.Second));
+    else if (strncmp(line, "  stop:", 7) == 0)
+      nso = sscanf(line+8,"%d %d %d %d %d %lf",&(obs->tstop.Year),&(obs->tstop.Month),&(obs->tstop.Day),&(obs->tstop.Hour),&(obs->tstop.Minute),&(obs->tstop.Second));
+    else if (strncmp(line, "  step:", 7) == 0)
+      sscanf(line+8, "%lf", &(obs->tstep));
+    line_len = getline(fp, line, 299);
   }
-  sscanf(line,"%s",obs->TLEpath);
-
-  //get observatory data filename
-  commentLine = 1;
-  while (commentLine)
-  {
-    getline(fp,line,299);
-    if (line[0] != '#')
-      commentLine = 0;
-  }
-  sscanf(line, "%s", obs->datafile);
-
-    //obs_to_use daylight_savings_time
-  commentLine = 1;
-  while (commentLine)
-  {
-    getline(fp,line,299);
-    if (line[0] != '#')
-    commentLine = 0;
-  }
-  sscanf(line,"%s %d",obs->Code,&(obs->daylightSavings));
   nconv = readLocation(obs);
   if (!nconv)
   {
     printf("Location not set\n.");
     exit(1);
   }
-
-  //tztype:  local or utc
-  commentLine = 1;
-  while (commentLine)
-  {
-    getline(fp,line,299);
-    if (line[0] != '#')
-      commentLine = 0;
-  }
-  sscanf(line,"%s",tztype);
   if (tztype[0] == 'u')
     obs->timeZone = 0.0;
-
-  // start Year Month Day hour min second
-  commentLine = 1;
-  while (commentLine)
+  resetTime(&dt);
+  if (nsa==6)
   {
-    getline(fp,line,299);
-    if (line[0] != '#')
-    commentLine = 0;
-  }
-  nconv = sscanf(line,"%d %d %d %d %d %lf",&(obs->tstart.Year),&(obs->tstart.Month),&(obs->tstart.Day),&(obs->tstart.Hour),&(obs->tstart.Minute),&(obs->tstart.Second));
-  if (nconv==6)
-  {
-    resetTime(&dt);
     dt.Hour = -1*(obs->timeZone + obs->daylightSavings);
     addTime(&(obs->tstart),dt);  /// Convert to UTC
   }
-  else if (nconv==4)
+  else if (nsa==4)
   {
-    resetTime(&dt);
     dt.Day = obs->tstart.Year;       // the correct position in sscanf above
     dt.Hour = obs->tstart.Month;     //   "
     dt.Minute = obs->tstart.Day;     //   "
@@ -311,31 +282,21 @@ int readObserver(struct observer *obs)
     obs->tstart.Year = tm_now->tm_year+1900;
     addTime(&(obs->tstart),dt);
   }
-  else
+  else if (nsa>6 || nsa<4 || nsa==5)
   {
     printf("Incorrect time start - need either (all int):\n\tabsolute(year month day hour minute second) or delta(day hour minute second)\n");
     exit(1);
   }
   obs->tstart.time = obs->tstart.Hour/24.0 + obs->tstart.Minute/24.0/60.0 + obs->tstart.Second/24.0/60.0/60.0;
 
-  // stop Year Month Day hour min second
-  commentLine = 1;
-  while (commentLine)
+  resetTime(&dt);
+  if (nso==6)
   {
-    getline(fp,line,299);
-    if (line[0] != '#')
-      commentLine = 0;
-  }
-  nconv = sscanf(line,"%d %d %d %d %d %lf",&(obs->tstop.Year),&(obs->tstop.Month),&(obs->tstop.Day),&(obs->tstop.Hour),&(obs->tstop.Minute),&(obs->tstop.Second));
-  if (nconv==6)
-  {
-    resetTime(&dt);
     dt.Hour = -1*(obs->timeZone + obs->daylightSavings);
     addTime(&(obs->tstop),dt);  /// Convert to UTC
   }
-  else if (nconv==4)
+  else if (nso==4)
   {
-    resetTime(&dt);
     dt.Day = obs->tstop.Year;       // the correct position in sscanf above
     dt.Hour = obs->tstop.Month;     //   "
     dt.Minute = obs->tstop.Day;     //   "
@@ -348,22 +309,12 @@ int readObserver(struct observer *obs)
     obs->tstop.Year = obs->tstart.Year;
     addTime(&(obs->tstop),dt);
   }
-  else
+  else if (nso>6 || nso<4 || nso==5)
   {
     printf("Incorrect time start - need either (all int):\n\tabsolute(year month day hour minute second) or delta(day hour minute second)\n");
     exit(1);
   }
   obs->tstop.time = obs->tstop.Hour/24.0 + obs->tstop.Minute/24.0/60.0 + obs->tstop.Second/24.0/60.0/60.0;
-
-  // step
-  commentLine = 1;
-  while (commentLine)
-  {
-    getline(fp,line,299);
-    if (line[0] != '#')
-      commentLine = 0;
-  }
-  sscanf(line,"%lf",&(obs->tstep));
 
   utcconv = obs->timeZone + obs->daylightSavings;
   printf("Start (UTC@%d):       %02d/%02d/%02d  %02d:%02d:%02d\n",utcconv,obs->tstart.Month,obs->tstart.Day,obs->tstart.Year,
