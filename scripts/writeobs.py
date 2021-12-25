@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-from blsky_util import Observatories
+from blsky.blsky_util import Observatories
 
 
 obstab = Observatories()

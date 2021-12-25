@@ -55,13 +55,15 @@ class Observatories:
     def table_make_row(self, obs):
         this_line = obs.ljust(6) + '\t'
         for col in self.columns:
+            entry = self.obs[obs][col].replace(' ', '_')
             if self.info[col]['justify'] == 'l':
-                val = self.obs[obs][col].ljust(self.info[col]['width'])
+                val = entry.ljust(self.info[col]['width'])
             elif self.info[col]['justify'] == 'c':
-                val = self.obs[obs][col].center(self.info[col]['width'])
+                val = entry.center(self.info[col]['width'])
             elif self.info[col]['justify'] == 'r':
-                val = self.obs[obs][col].rjust(self.info[col]['width'])
-            this_line += f"{val.replace(' ', '_')}\t"
+                entry = entry + '  '
+                val = entry.rjust(self.info[col]['width'])
+            this_line += f"{val}\t"
         return this_line.rstrip()
 
 
