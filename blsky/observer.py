@@ -1,43 +1,21 @@
 from astropy import units as u
 from astropy.coordinates import SkyCoord, AltAz, EarthLocation, Angle
 import numpy as np
-from . import horizons, ephem
+from . import horizons, ephem, blsky_util
 from . import my_dateutil as dateutil
 from argparse import Namespace
 
-
-LOCATIONLIST = {
-                'pks': {'name': 'Parkes NSW',
-                        'lat': -32.995126867833136,
-                        'lon': 148.26238459073372,
-                        'alt': 480.1,
-                        'key': 'pks'},
-                'gbt': {'name': 'GBT WV',
-                        'lat': 38.43286455266003,
-                        'lon': -79.83971215724313,
-                        'alt': 147.8,
-                        'key': 'gbt'},
-                'marjum': {'name': "Marjum Pass, UT",
-                           'lat': 39.255474907866805,
-                           'lon': -113.35935710202114,
-                           'alt': 1900.0,
-                           'key': 'Marjum'},
-                '0-0': {'name': "Origin",
-                        'lat': 0.0,
-                        'lon': 0.0,
-                        'alt': 0.0,
-                        'key': '0-0'}
-               }
+locations = blsky_util.Observatories()
 
 
 def getloc(name):
-    if name in LOCATIONLIST.keys():
-        loc = LOCATIONLIST[name]
+    if name in locations.obs.keys():
+        loc = locations.obs[name]
         loc['r'] = earth_radius(loc['lat']) + loc['alt']
         return loc
     print("Options:")
-    for k, v in LOCATIONLIST.items():
-        print(f"\t{k}:  {v}")
+    for k, v in locations.obs.items():
+        print(f"\t{k}:  {v['name']}")
     return {}
 
 
@@ -85,8 +63,8 @@ class Pointing(ephem.BaseEphem):
             if alt is not None:
                 alt_offset = 1.0 * alt
             if lon is None:
-                if name in LOCATIONLIST.keys():
-                    loc = LOCATIONLIST[name]
+                if name in locations.obs.keys():
+                    loc = locations.obs[name]
                     self.name, lon, lat, alt = loc['name'], loc['lon'], loc['lat'], loc['alt']
                 else:
                     self.loc = EarthLocation.of_site(name)

@@ -6,7 +6,7 @@ The TLE files are maintained in the /tle subdirectory and may be updated using t
 
 --satpos--
 Given TLE (from a file, location set in satpos_cfg.yaml) it writes a file:
-    'sp_{filename}{entry_number_in_file:04d}.out' which contains a track over the period specified in satpos.cfg (which must be in that directory)
+    'sp_{tlefilename}{entry_number_in_file:04d}.out' which contains a track over the period specified in satpos_cfg.yaml (which must be in that directory)
 e.g. satpos active 123
 
 
@@ -21,8 +21,8 @@ random modules using sattrack (or not) to look at satellite data.
 
 How-to
 ======
-1 - make sure TLE files in tle_archive are what you want
-2 - run satpos_script.py <filename>.tle to generate a shell script for satpos (<filename>=>active)
-    writes:  satpos_<filename>.sh:  script for satpos (chmod u+x)
-             sp<filename>.list:  used by find_viewable
-3 - ?satcensus.find_viewable?
+1 - make sure TLE file(s) in tle_archive are what you want
+2 - run satpos_script.py <tlefilename> to generate a shell script for satpos (<tlefilename> is typically 'active')
+    writes:  satpos_<tlefilename>.sh:  script for satpos
+             sp_<tlefilename>.list:  used by find_viewable
+3 - run satpos_<tlefilename>.sh

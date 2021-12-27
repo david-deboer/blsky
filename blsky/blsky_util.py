@@ -1,20 +1,60 @@
 import subprocess
 import yaml
+from math import modf, copysign, pow, fabs
+
+
+def dms(deg, sfrac=2):
+    f, d = modf(deg)
+    f, m = modf(abs(f) * 60)
+    f, s = modf(f * 60)
+    sf = str(pow(10, sfrac) * f).split('.')[0]
+    if len(sf) < sfrac:
+        sf = '0' * (sfrac - len(sf)) + sf
+    return f"{int(d)}:{int(m):02d}:{int(s):02d}.{sf}"
+
+
+def deg(dms):
+    if isinstance(dms, str):
+        dms = dms.split(':')
+    dms = [float(x) for x in dms]
+    sum = 0.0
+    for i in range(len(dms)):
+        sum += fabs(dms[i]) / pow(60.0, i)
+    return copysign(1.0, dms[0]) * sum
 
 
 class Observatories:
-    def __init__(self, obsfile='satpos_obs.yaml'):
+    def __init__(self, obsfile='satpos_obs.yaml', sec_precision=2):
         with open('satpos_obs.yaml', 'r') as fp:
             self.obs = yaml.load(fp, Loader=yaml.Loader)
+        self.proc_dict()
 
-    def table_get_meta(self):
+    def proc_dict(self):
+        """
+        Strip out meta data and fix lat/lon and lat_dms/lon_dms
+        """
         cull_keys = []
-        for key, val in self.obs.items():
-            if key.startswith('__'):
-                if key.strip('__') in ['columns', 'include', 'exclude']:
-                    val = val.split(',')
-                setattr(self, key.strip('__'), val)
-                cull_keys.append(key)
+        extra_fields = {}
+        for obs, entry in self.obs.items():
+            if obs.startswith('__'):
+                if obs.strip('__') in ['columns', 'include', 'exclude']:
+                    entry = entry.split(',')
+                setattr(self, obs.strip('__'), entry)
+                cull_keys.append(obs)
+            else:
+                extra_fields[obs] = {}
+                for key, val in entry.items():
+                    if key in ['lat', 'lon']:
+                        if ':' in str(val):
+                            self.obs[obs][key] = deg(val)
+                        else:
+                            self.obs[obs][key] = float(val)
+                        extra_fields[obs][key + '_dms'] = dms(self.obs[obs][key])
+                    elif key in ['horizon', 'alt', 'tz']:
+                        self.obs[obs][key] = float(val)
+        for obs in extra_fields:
+            self.obs[obs]['lat_dms'] = extra_fields[obs]['lat_dms']
+            self.obs[obs]['lon_dms'] = extra_fields[obs]['lon_dms']
         for key in cull_keys:
             del(self.obs[key])
         if self.include[0].lower() == 'all':
@@ -22,6 +62,8 @@ class Observatories:
         for excl in self.exclude:
             if excl in self.include:
                 self.include.remove(excl)
+
+    def table_get_meta(self):
         self.info = {}
         for hdr in self.columns:
             self.info[hdr] = {}
@@ -55,7 +97,7 @@ class Observatories:
     def table_make_row(self, obs):
         this_line = obs.ljust(6) + '\t'
         for col in self.columns:
-            entry = self.obs[obs][col].replace(' ', '_')
+            entry = str(self.obs[obs][col]).replace(' ', '_')
             if self.info[col]['justify'] == 'l':
                 val = entry.ljust(self.info[col]['width'])
             elif self.info[col]['justify'] == 'c':

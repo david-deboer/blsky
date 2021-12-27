@@ -2,6 +2,7 @@
 from argparse import Namespace
 from . import sattrack
 import os.path as op
+import yaml
 
 
 def filter_drift(f=982e6, rng=[0.025, 0.05], absvalue=True,
@@ -152,7 +153,7 @@ def find_viewable(loc, trackfilelist='spactive.list', path='', verbose=False):
 satpos_cfg = {1: 'tlepath', 2: 'obsfile', 3: 'obs', 4: 'torigin', 5: 'start', 6: 'stop', 7: 'step'}
 
 
-def satpos_script(tlefile, cfgfile='satpos.cfg'):
+def satpos_script(tlefile, cfgfile='satpos_cfg.yaml'):
     """
     Write a bash script to check entry numbers within a tle file repetitiously via satpos.
 
@@ -160,19 +161,11 @@ def satpos_script(tlefile, cfgfile='satpos.cfg'):
     """
     scfg = {}
     with open(cfgfile, 'r') as fp:
-        i = 1
-        for line in fp:
-            if line[0] != '#':
-                data = line.strip().split()
-                if len(data) > 1:
-                    scfg[satpos_cfg[i]] = data
-                else:
-                    scfg[satpos_cfg[i]] = line.strip()
-                i += 1
-    if '.' not in tlefile:
+        scfg = yaml.load(fp, Loader=yaml.Loader)['config']
+    if not tlefile.endswith('.tle'):
         tlefile = f"{tlefile}.tle"
     tprename = tlefile.split('.')[0]
-    tlefile = op.join(scfg['tlepath'], tlefile)
+    tlefile = op.join(scfg['path_to_tle_files'], tlefile)
     tot = 0
     with open(tlefile, 'r') as fp:
         for line in fp:
@@ -180,11 +173,13 @@ def satpos_script(tlefile, cfgfile='satpos.cfg'):
     tot = int(tot / 3.0)
     outfile = f'satpos_{tprename}.sh'
     print(f"Writing {tot} entries to {outfile}.")
-    with open(f"sp{tprename}.list", "w") as splistfp:
+    with open(f"sp_{tprename}.list", "w") as splistfp:
         with open(outfile, 'w') as fp:
             for i in range(tot):
                 print(f"satpos {tprename} {i+1}", file=fp)
-                print(f"sp{tprename}{i+1:04d}.out", file=splistfp)
+                print(f"sp_{tprename}{i+1:04d}.out", file=splistfp)
+    from os import chmod
+    chmod(outfile, 0o755)
 
 
 def generate_complete_set(epoch=None, path='tle', fmname='master.dat'):
