@@ -10,7 +10,7 @@ class Track(ephem.BaseEphem):
     def __init__(self, fname):
         self.param.append('since')  # add variable you want to include in the class - must be first
         self.fname = fname
-        super().__init__()
+        super().__init__()  # Uses self.param
         self.read_file()
 
     def read_file(self):

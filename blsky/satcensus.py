@@ -86,7 +86,14 @@ def showdist():
     notv.zmax = np.array(notv.zmax)
 
 
-def find_viewable(loc, satlist='satpos_active.sh', path='', verbose=False):
+def check_location(previous_loc, fullfname):
+    with open(fullfname, 'r') as fp:
+        for line in fp:
+            if line.startswith('#observer:'):
+                return previous_loc, line.split(':')[-1].strip()
+
+
+def find_viewable(satlist='satpos_active.sh', path='', verbose=False):
     """
     Run satpos over the desired TLEs ('satpos active 1', ...)
     and ls that list in the path.
@@ -94,13 +101,12 @@ def find_viewable(loc, satlist='satpos_active.sh', path='', verbose=False):
     This writes viewable.csv and notviewable.csv of those tracks for loc.
     """
     viewable = open('viewable.csv', 'w')
-    print(loc, file=viewable)
     notviewable = open('notviewable.csv', 'w')
-    print(loc, file=notviewable)
     hdrstr = "file,scname,satnum,orbit,period,sublon,zamin,zamax"
     print(hdrstr, file=viewable)
     print(hdrstr, file=notviewable)
     count = Namespace(leo=0, meo=0, geo=0, deep=0, other=0, viewable=0, notviewable=0)
+    loc = None
     with open(satlist, 'r') as fp:
         i = 0
         for line in fp:
@@ -108,9 +114,16 @@ def find_viewable(loc, satlist='satpos_active.sh', path='', verbose=False):
             if len(data) != 3 or data[0] != 'satpos':
                 continue
             fname = f"sp_{data[1]}{int(data[2]):04d}.out"
+            fullfname = op.join(path, fname)
+            previous_loc, loc = check_location(loc, fullfname)
+            if previous_loc is None:
+                print(loc, file=viewable)
+                print(loc, file=notviewable)
+            elif previous_loc != loc:
+                raise RuntimeError(f"Locations don't agree:  {previous_loc} vs {loc}")
             if verbose:
-                print(f"Reading {fname}")
-            s = sattrack.Track(op.join(path, fname))
+                print(f"Reading {fullfname}")
+            s = sattrack.Track(fullfname)
             s.view(loc)
             if s.period > 1500.0:
                 count.deep += 1

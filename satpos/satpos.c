@@ -158,6 +158,7 @@ int main(int argc, char *argv[])
   // Write header
   fprintf(outfile, "#spacecraft name: %s\n", SCName);
   fprintf(outfile, "#satnum: %ld\n", satrec.satnum);
+  fprintf(outfile, "#observer: %s\n", obs.Code);
   fprintf(outfile, "#file and entry number: %s %d\n", TLEFile, k);
   fprintf(outfile, "#line1: %s\n", longstr1);
   fprintf(outfile, "#line2: %s\n", longstr2);
