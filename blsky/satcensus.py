@@ -73,7 +73,6 @@ def showdist():
             if line.startswith('#'):
                 continue
             data = line.split(',')
-            notv.iarr.append(int(data[1].split()[0]))
             notv.period.append(float(data[2]))
             notv.elmin.append(float(data[-2]))
             notv.elmax.append(float(data[-1]))
