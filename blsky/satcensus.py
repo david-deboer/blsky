@@ -52,42 +52,36 @@ def showdist():
     Reads in viewable.csv and notviewable.csv and shows various things about them.
     """
     import numpy as np
-    view = Namespace(iarr=[], period=[], zmin=[], zmax=[])
-    notv = Namespace(iarr=[], period=[], zmin=[], zmax=[])
+    view = Namespace(period=[], elmin=[], elmax=[])
+    notv = Namespace(period=[], elmin=[], elmax=[])
     with open('viewable.csv', 'r') as fp:
-        loc = fp.readline().strip()
-        print("Location ", loc.strip('#'))
+        loc = fp.readline().strip('#').strip()
+        print("Location ", loc)
         for line in fp:
             if line.startswith('#'):
                 continue
             data = line.split(',')
-            view.iarr.append(int(data[1].split()[0]))
-            view.period.append(float(data[1].split('=')[1].split()[0]))
-            view.zmin.append(float(data[2]))
-            view.zmax.append(float(data[3]))
-    view.iarr = np.array(view.iarr)
+            view.period.append(float(data[2]))
+            view.elmin.append(float(data[-2]))
+            view.elmax.append(float(data[-1]))
     view.period = np.array(view.period)
-    view.zmin = np.array(view.zmin)
-    view.zmax = np.array(view.zmax)
+    view.elmin = np.array(view.elmin)
+    view.elmax = np.array(view.elmax)
 
     with open('notviewable.csv', 'r') as fp:
-        loc = fp.readline().strip()
         for line in fp:
             if line.startswith('#'):
                 continue
             data = line.split(',')
             notv.iarr.append(int(data[1].split()[0]))
-            notv.period.append(float(data[1].split('=')[1].split()[0]))
-            try:
-                notv.zmin.append(float(data[2]))
-                notv.zmax.append(float(data[3]))
-            except ValueError:
-                notv.zmin.append(0.0)
-                notv.zmax.append(0.0)
-    notv.iarr = np.array(notv.iarr)
+            notv.period.append(float(data[2]))
+            notv.elmin.append(float(data[-2]))
+            notv.elmax.append(float(data[-1]))
     notv.period = np.array(notv.period)
-    notv.zmin = np.array(notv.zmin)
-    notv.zmax = np.array(notv.zmax)
+    notv.elmin = np.array(notv.elmin)
+    notv.elmax = np.array(notv.elmax)
+
+    return view, notv
 
 
 def check_location(previous_loc, fullfname):
@@ -140,8 +134,8 @@ def find_viewable(satlist='satpos_active.sh', path='', verbose=False):
                 count.other += 1
                 orbit = 'other'
             try:
-                elmin = s.el.min()
-                elmax = s.el.max()
+                elmin = s.el.min().value
+                elmax = s.el.max().value
             except (ValueError, AttributeError):
                 elmin = '!'
                 elmax = '!'
