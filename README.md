@@ -22,7 +22,6 @@ random modules using sattrack (or not) to look at satellite data.
 How-to
 ======
 1 - make sure TLE file(s) in tle_archive are what you want
-2 - run satpos_script.py <tlefilename> to generate a shell script for satpos (<tlefilename> is typically 'active')
+2 - run satpos_script.py <tlefilename> to generate a shell script for satpos (default is 'active')
     writes:  satpos_<tlefilename>.sh:  script for satpos
-             sp_<tlefilename>.list:  used by find_viewable
 3 - run satpos_<tlefilename>.sh

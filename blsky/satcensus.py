@@ -2,6 +2,7 @@
 from argparse import Namespace
 from . import sattrack
 import os.path as op
+from os import chmod
 import yaml
 
 
@@ -85,7 +86,7 @@ def showdist():
     notv.zmax = np.array(notv.zmax)
 
 
-def find_viewable(loc, trackfilelist='spactive.list', path='', verbose=False):
+def find_viewable(loc, satlist='satpos_active.sh', path='', verbose=False):
     """
     Run satpos over the desired TLEs ('satpos active 1', ...)
     and ls that list in the path.
@@ -100,10 +101,13 @@ def find_viewable(loc, trackfilelist='spactive.list', path='', verbose=False):
     print(hdrstr, file=viewable)
     print(hdrstr, file=notviewable)
     count = Namespace(leo=0, meo=0, geo=0, deep=0, other=0, viewable=0, notviewable=0)
-    with open(trackfilelist, 'r') as fp:
+    with open(satlist, 'r') as fp:
         i = 0
         for line in fp:
-            fname = line.strip()
+            data = line.split()
+            if len(data) != 3 or data[0] != 'satpos':
+                continue
+            fname = f"sp_{data[1]}{int(data[2]):04d}.out"
             if verbose:
                 print(f"Reading {fname}")
             s = sattrack.Track(op.join(path, fname))
@@ -150,35 +154,31 @@ def find_viewable(loc, trackfilelist='spactive.list', path='', verbose=False):
     print(f"NOTVIEWABLE: {count.notviewable}")
 
 
-satpos_cfg = {1: 'tlepath', 2: 'obsfile', 3: 'obs', 4: 'torigin', 5: 'start', 6: 'stop', 7: 'step'}
-
-
-def satpos_script(tlefile, cfgfile='satpos_cfg.yaml'):
+def satpos_script(tlefile, cfgfile=None):
     """
     Write a bash script to check entry numbers within a tle file repetitiously via satpos.
-
-    Also writes a .list file for find_viewable.
     """
     scfg = {}
-    with open(cfgfile, 'r') as fp:
-        scfg = yaml.load(fp, Loader=yaml.Loader)['config']
     if not tlefile.endswith('.tle'):
         tlefile = f"{tlefile}.tle"
-    tprename = tlefile.split('.')[0]
-    tlefile = op.join(scfg['path_to_tle_files'], tlefile)
+
+    if cfgfile is not None:
+        with open(cfgfile, 'r') as fp:
+            scfg = yaml.load(fp, Loader=yaml.Loader)['config']
+        tlefile = op.join(scfg['path_to_tle_files'], tlefile)
+
+    tprename = op.splitext(op.basename(tlefile))[0]
     tot = 0
     with open(tlefile, 'r') as fp:
         for line in fp:
             tot += 1
-    tot = int(tot / 3.0)
+    tot = tot // 3
     outfile = f'satpos_{tprename}.sh'
-    print(f"Writing {tot} entries to {outfile}.")
-    with open(f"sp_{tprename}.list", "w") as splistfp:
-        with open(outfile, 'w') as fp:
-            for i in range(tot):
-                print(f"satpos {tprename} {i+1}", file=fp)
-                print(f"sp_{tprename}{i+1:04d}.out", file=splistfp)
-    from os import chmod
+    print(f"Using {tlefile}")
+    print(f"Writing {tot} entries to {outfile}")
+    with open(outfile, 'w') as fp:
+        for i in range(tot):
+            print(f"satpos {tprename} {i+1}", file=fp)
     chmod(outfile, 0o755)
 
 

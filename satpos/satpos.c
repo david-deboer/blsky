@@ -66,6 +66,7 @@ int main(int argc, char *argv[])
     scanf("%s",TLEprefix);
   }
   sprintf(TLEFile,"%s/%s.tle",obs.TLEpath,TLEprefix);
+
   fp=fopen(TLEFile,"r");
   if (fp==NULL)
   {
@@ -327,7 +328,7 @@ int readObserver(struct observer *obs)
 
 int readLocation(struct observer *obs)
 {
-  int commentLine, lline;
+  int commentLine, still_looking;
   double a, b, c;
   char line[120], code[20], tmpLat[20], tmpLng[20];
   FILE *fp;
@@ -339,25 +340,26 @@ int readLocation(struct observer *obs)
     return 0;
   }
 
-  // get to observatory listing
-  commentLine = 1;
-  while (commentLine)
-  {
-    getline(fp,line,299);
-    if (line[0] == '!')
-      commentLine = 0;
-  }
   // find desired observatory
-  lline = 50;
-  while (!feof(fp) && lline>30)
+  still_looking = 1;
+  getline(fp, line, 299);
+  while (!feof(fp) && strlen(line) > 30)
   {
-    getline(fp,line,299);
-    lline = strlen(line);
-    sscanf(line,"%s",code);
-    if (!strcmp(code,obs->Code))
-    lline = 0;
+    if (line[0] != '#')
+    {
+      sscanf(line,"%s",code);
+      if (!strcmp(code,obs->Code))
+      {
+        sscanf(line,"%s %s %s %s %lf %lf %d",obs->Code,obs->Name,tmpLat,tmpLng,&(obs->alt),&(obs->Horizon),&(obs->timeZone));
+        still_looking = 0;
+      }
+    }
+    if (still_looking)
+      getline(fp, line, 299);
+    else
+      strcpy(line, "END");
   }
-  sscanf(line,"%s %s %s %s %lf %lf %d",obs->Code,obs->Name,tmpLat,tmpLng,&(obs->alt),&(obs->Horizon),&(obs->timeZone));
+
   sscanf(tmpLat,"%lf:%lf:%lf",&a,&b,&c);
   obs->lat = a + b/60.0 + c/3600.0;
   sscanf(tmpLng,"%lf:%lf:%lf",&a,&b,&c);
