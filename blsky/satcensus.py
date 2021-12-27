@@ -35,14 +35,14 @@ def filter_drift(f=982e6, rng=[0.025, 0.05], absvalue=True,
                 chkdrift = drift
                 if absvalue:
                     chkdrift = abs(drift)
-                if s.za[i] < 90.0 and chkdrift > rng[0] and chkdrift < rng[1]:
-                    drifts.setdefault(s.satnum, Namespace(t=[], drift=[], za=[], period=[]))
+                if s.el[i] > 0.0 and chkdrift > rng[0] and chkdrift < rng[1]:
+                    drifts.setdefault(s.satnum, Namespace(t=[], drift=[], el=[], period=[]))
                     drifts[s.satnum].t.append(s.dtime[i])
                     drifts[s.satnum].drift.append(drift)
-                    drifts[s.satnum].za.append(s.za[i])
+                    drifts[s.satnum].el.append(s.el[i])
                     drifts[s.satnum].period.append(s.period)
                     print(f"{fname},{s.satnum},{s.since[i]},{drift},{s.x[i]},{s.y[i]},{s.z[i]},"
-                          f"{s.za[i]},{s.period}", file=outsats)
+                          f"{s.el[i]},{s.period}", file=outsats)
     outsats.close()
     return drifts
 
@@ -99,14 +99,11 @@ def check_location(previous_loc, fullfname):
 
 def find_viewable(satlist='satpos_active.sh', path='', verbose=False):
     """
-    Run satpos over the desired TLEs ('satpos active 1', ...)
-    and ls that list in the path.
-
     This writes viewable.csv and notviewable.csv of those tracks for loc.
     """
     viewable = open('viewable.csv', 'w')
     notviewable = open('notviewable.csv', 'w')
-    hdrstr = "file,scname,satnum,orbit,period,sublon,zamin,zamax"
+    hdrstr = "file,scname,satnum,orbit,period,sublon,elmin,elmax"
     count = Namespace(leo=0, meo=0, geo=0, deep=0, other=0, viewable=0, notviewable=0)
     loc = None
     with open(satlist, 'r') as fp:
@@ -143,13 +140,13 @@ def find_viewable(satlist='satpos_active.sh', path='', verbose=False):
                 count.other += 1
                 orbit = 'other'
             try:
-                zamin = s.za.min()
-                zamax = s.za.max()
+                elmin = s.el.min()
+                elmax = s.el.max()
             except (ValueError, AttributeError):
-                zamin = '!'
-                zamax = '!'
+                elmin = '!'
+                elmax = '!'
             fnp = fname.split('.')[0]
-            pline = f"{fnp},{s.scname},{s.satnum},{orbit},{s.period},{s.sublon},{zamin},{zamax}"
+            pline = f"{fnp},{s.scname},{s.satnum},{orbit},{s.period},{s.sublon},{elmin},{elmax}"
             if s.viewable:
                 print(pline, file=viewable)
                 count.viewable += 1

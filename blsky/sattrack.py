@@ -43,6 +43,7 @@ class Track(ephem.BaseEphem):
     def parse_header(self, default_epoch='2019-04-29 '):
         self.headers = {'scname': Namespace(text='spacecraft name', type=str, nval=0),
                         'satnum': Namespace(text='satnum', type=int, nval=0),
+                        'observer': Namespace(text='observer', type=str, nval=0),
                         'period': Namespace(text='period', type=float, nval=0),
                         'sublon': Namespace(text='starting lon lat h', type=float, nval=0),
                         'sublat': Namespace(text='starting lon lat h', type=float, nval=1),
