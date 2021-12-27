@@ -56,8 +56,10 @@ def showdist():
     notv = Namespace(iarr=[], period=[], zmin=[], zmax=[])
     with open('viewable.csv', 'r') as fp:
         loc = fp.readline().strip()
-        print("Location ", loc)
+        print("Location ", loc.strip('#'))
         for line in fp:
+            if line.startswith('#'):
+                continue
             data = line.split(',')
             view.iarr.append(int(data[1].split()[0]))
             view.period.append(float(data[1].split('=')[1].split()[0]))
@@ -71,6 +73,8 @@ def showdist():
     with open('notviewable.csv', 'r') as fp:
         loc = fp.readline().strip()
         for line in fp:
+            if line.startswith('#'):
+                continue
             data = line.split(',')
             notv.iarr.append(int(data[1].split()[0]))
             notv.period.append(float(data[1].split('=')[1].split()[0]))
@@ -103,8 +107,6 @@ def find_viewable(satlist='satpos_active.sh', path='', verbose=False):
     viewable = open('viewable.csv', 'w')
     notviewable = open('notviewable.csv', 'w')
     hdrstr = "file,scname,satnum,orbit,period,sublon,zamin,zamax"
-    print(hdrstr, file=viewable)
-    print(hdrstr, file=notviewable)
     count = Namespace(leo=0, meo=0, geo=0, deep=0, other=0, viewable=0, notviewable=0)
     loc = None
     with open(satlist, 'r') as fp:
@@ -117,8 +119,8 @@ def find_viewable(satlist='satpos_active.sh', path='', verbose=False):
             fullfname = op.join(path, fname)
             previous_loc, loc = check_location(loc, fullfname)
             if previous_loc is None:
-                print(loc, file=viewable)
-                print(loc, file=notviewable)
+                print(f"#{loc}\n#{hdrstr}", file=viewable)
+                print(f"#{loc}\n#{hdrstr}", file=notviewable)
             elif previous_loc != loc:
                 raise RuntimeError(f"Locations don't agree:  {previous_loc} vs {loc}")
             if verbose:
