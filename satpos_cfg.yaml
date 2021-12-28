@@ -6,7 +6,7 @@ config:
   time_basis: utc  # local
   start: 2021 12 9 0 0 0
   stop: 0 0 30 0
-  step: 5
+  step: 1
   help:
     start:  'either absolute Y M D H M S (==6, local/utc) or offset from now D H M S (==4)'
     stop: 'either absolute Y M D H M S(==6, local/utc) or offset from start D H M S (==4)'

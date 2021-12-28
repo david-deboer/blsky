@@ -92,7 +92,8 @@ def check_location(previous_loc, fullfname):
                 return previous_loc, line.split(':')[-1].strip()
 
 
-def find_viewable(satlist='satpos_active.sh', path='', verbose=False):
+def find_viewable(satlist='satpos_active.sh', path='',
+                  rewrite_file=False, verbose=False):
     """
     This writes viewable.csv and notviewable.csv of those tracks for loc.
     """
@@ -123,6 +124,8 @@ def find_viewable(satlist='satpos_active.sh', path='', verbose=False):
             except:  # noqa
                 print(f"{fullfname} not read.")
                 continue
+            if rewrite_file:
+                s.rewrite_file(overwrite=True)
             if s.period > 1500.0:
                 count.deep += 1
                 orbit = 'deep'

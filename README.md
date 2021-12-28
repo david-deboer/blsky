@@ -1,6 +1,6 @@
 blsky contains modules to investigate technosignature observing.  This primarily relates to rfi and drift of narrow-band signals.
 
-satpos  implements the sgp4 orbital tracking code (http://www.celestrak.com/NORAD/elements/) and some other code to prep the data.
+satpos  implements the sgp4 orbital tracking code (http://www.celestrak.com/NORAD/elements/) and some other code to prep the data. https://orbit.ing-now.com/
 
 The TLE files are maintained in the /tle subdirectory and may be updated using the script 'updatetle.py' while in that directory.  There is a branch of this repo called tle_archive, so please update in that branch as well as the main branch.  Use a commit message of the form `TLE update 2021-12-15 11:50:10`.  The tle_archive branch gets updated weekly on Sunday night.  DO NOT MERGE THE tle_archive BRANCH WITH MAIN!  (I intend to write up modules to pull archived tles out.)
 
