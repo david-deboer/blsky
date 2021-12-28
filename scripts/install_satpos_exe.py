@@ -8,4 +8,5 @@ if getcwd().endswith('blsky'):
 else:
     print("Must be in blsky directory.")
 
-print("Run satpos in a directory containing satpos.obs and satpos.cfg.")
+print("Run satpos in a directory containing satpos.obs and satpos_cfg.yaml")
+print("If no satpos.obs, run satpos_make_obs.py")

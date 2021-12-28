@@ -18,10 +18,20 @@ reads in the .out files from above and computes various parameters.
 from satpos import satcensus
 random modules using sattrack (or not) to look at satellite data.
 
+Install
+=======
+1 - `pip install .`
+2 - `install_satpos_exe.py`
+
+Before you run
+==============
+1 - make sure TLE file(s) in tle_archive are what you want (may need `updatetle.py` or above GIT)
+2 - make sure the location information is there (in satpos.obs, but update in satpos_obs.yaml, then run
+`satpos_make_obs.py`)
 
 How-to
 ======
-1 - make sure TLE file(s) in tle_archive are what you want
-2 - run satpos_script.py <tlefilename> to generate a shell script for satpos (default is 'active')
+1 - `satpos_script.py <tlefilename>` to generate a shell script for satpos (default is 'active')
     writes:  satpos_<tlefilename>.sh:  script for satpos
-3 - run satpos_<tlefilename>.sh
+2 - `satpos_<tlefilename>.sh`
+3 - `viewable.py`
