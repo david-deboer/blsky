@@ -121,7 +121,7 @@ def find_viewable(satlist='satpos_active.sh', path='', verbose=False):
                 s = sattrack.Track(fullfname)
                 s.view(loc)
             except:  # noqa
-                print("Not read.")
+                print(f"{fullfname} not read.")
                 continue
             if s.period > 1500.0:
                 count.deep += 1
