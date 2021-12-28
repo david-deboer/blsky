@@ -49,7 +49,7 @@ def filter_drift(f=982e6, rng=[0.025, 0.05], absvalue=True,
 
 def showdist():
     """
-    Reads in viewable.csv and notviewable.csv and shows various things about them.
+    Reads in viewable.csv and notviewable.csv
     """
     import numpy as np
     view = Namespace(num=[], period=[], elmin=[], elmax=[])
@@ -117,8 +117,12 @@ def find_viewable(satlist='satpos_active.sh', path='', verbose=False):
                 raise RuntimeError(f"Locations don't agree:  {previous_loc} vs {loc}")
             if verbose:
                 print(f"Reading {fullfname}")
-            s = sattrack.Track(fullfname)
-            s.view(loc)
+            try:
+                s = sattrack.Track(fullfname)
+                s.view(loc)
+            except:  # noqa
+                print("Not read.")
+                continue
             if s.period > 1500.0:
                 count.deep += 1
                 orbit = 'deep'
@@ -159,6 +163,8 @@ def find_viewable(satlist='satpos_active.sh', path='', verbose=False):
     print(f"OTHER: {count.other}")
     print(f"VIEWABLE: {count.viewable}")
     print(f"NOTVIEWABLE: {count.notviewable}")
+
+    print("Wrote viewable.csv, notviewable.csv")
 
 
 def satpos_script(tlefile, cfgfile=None):

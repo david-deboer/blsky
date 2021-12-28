@@ -39,6 +39,7 @@ class Track(ephem.BaseEphem):
                 setattr(self, sp, np.array(getattr(self, sp))*1000.0*u.m/u.s)  # convert to m
         self.times = Time(self.times)
         self.parse_header()
+        self.set_location()
 
     def parse_header(self, default_epoch='2019-04-29 '):
         self.headers = {'scname': Namespace(text='spacecraft name', type=str, nval=0),
@@ -74,8 +75,10 @@ class Track(ephem.BaseEphem):
         self.rates(freq)
         self.subsat()
 
-    def set_location(self, name, lon=None, lat=None, alt=None):
+    def set_location(self, name=None, lon=None, lat=None, alt=None):
         """Make a location instance."""
+        if name is None:
+            name = self.headers['observer'].value
         self.location = observer.Pointing(name, lon, lat, alt)
         self.loc = Namespace(x=self.location.loc.x,
                              y=self.location.loc.y,
