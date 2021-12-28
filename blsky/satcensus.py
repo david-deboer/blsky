@@ -52,8 +52,8 @@ def showdist():
     Reads in viewable.csv and notviewable.csv and shows various things about them.
     """
     import numpy as np
-    view = Namespace(period=[], elmin=[], elmax=[])
-    notv = Namespace(period=[], elmin=[], elmax=[])
+    view = Namespace(num=[], period=[], elmin=[], elmax=[])
+    notv = Namespace(num=[], period=[], elmin=[], elmax=[])
     with open('viewable.csv', 'r') as fp:
         loc = fp.readline().strip('#').strip()
         print("Location ", loc)
@@ -61,7 +61,8 @@ def showdist():
             if line.startswith('#'):
                 continue
             data = line.split(',')
-            view.period.append(float(data[2]))
+            view.num.append(int(data[2]))
+            view.period.append(float(data[4]))
             view.elmin.append(float(data[-2]))
             view.elmax.append(float(data[-1]))
     view.period = np.array(view.period)
@@ -73,7 +74,8 @@ def showdist():
             if line.startswith('#'):
                 continue
             data = line.split(',')
-            notv.period.append(float(data[2]))
+            notv.num.append(int(data[2]))
+            notv.period.append(float(data[4]))
             notv.elmin.append(float(data[-2]))
             notv.elmax.append(float(data[-1]))
     notv.period = np.array(notv.period)

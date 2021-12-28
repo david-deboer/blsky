@@ -10,6 +10,7 @@
 
 /**************************************************************/
 /* All internal time is UTC.  Some I/O in local */
+// https://mycoordinates.org/tracking-satellite-footprints-on-earth’s-surface/
 
 #undef VERBOSE
 int main(int argc, char *argv[])
@@ -143,7 +144,7 @@ int main(int argc, char *argv[])
   invjday( jd, year,mon,day,hr,min,sec );
   printf("stk.v.4.3 \n"); // must use 4.3...
   printf("ScenarioEpoch:  %3i %3s%5i%3i:%2i:%12.9f \n",day,monstr[mon],year,hr,min,sec);
-  printf("CoordinateSystem:  TEME-to-PEF\n\n");
+  printf("CoordinateSystem:  TEME-to-PEF\n\n");  //TEME (True Equator Mean Equinox) - PEF (Pseudo Earth Fixed)
 
   // First do it for 'start'
   tsince = startmfe;
