@@ -269,18 +269,15 @@ def find_viewable(satlist='satpos_active.sh', path='',
     print("Wrote viewable.csv, notviewable.csv")
 
 
-def satpos_script(tlefile, cfgfile=None):
+def satpos_script(tlefile, path=None):
     """
     Write a bash script to check entry numbers within a tle file repetitiously via satpos.
     """
-    scfg = {}
     if not tlefile.endswith('.tle'):
         tlefile = f"{tlefile}.tle"
 
-    if cfgfile is not None:
-        with open(cfgfile, 'r') as fp:
-            scfg = yaml.load(fp, Loader=yaml.Loader)['config']
-        tlefile = op.join(scfg['path_to_tle_files'], tlefile)
+    if path is not None:
+        tlefile = op.join(path, tlefile)
 
     tprename = op.splitext(op.basename(tlefile))[0]
     tot = 0
