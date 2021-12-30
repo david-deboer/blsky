@@ -6,6 +6,16 @@ from os import chmod
 import yaml
 
 
+def _get_lno(s):
+    try:
+        lno = int(s)
+    except ValueError:
+        lno = 0
+    if lno not in [0, 1, 2]:
+        lno = 0
+    return lno
+
+
 def read_tle_file(filename):
     lno = ['0', '0', '0']
     sc = {}
@@ -14,7 +24,7 @@ def read_tle_file(filename):
             data = line.split()
             if len(data) < 2:
                 continue
-            this_lno = int(data[0])
+            this_lno = _get_lno(data[0])
             lno[this_lno] = line.strip()
             if this_lno == 1:
                 this_epoch = int(float(data[3]) * 100.0)
@@ -52,17 +62,21 @@ def agg_tle(tlefiles, epoch, outfile='agg.tle', cull_to=None):
     for this_file in tlefiles:
         print(this_file)
         sc.update(read_tle_file(this_file))
-    print(f"{len(sc.keys())} satellites")
+    sc_tot = len(sc.keys())
+    print(f"{sc_tot} satellites")
     import numpy as np
     print(f"Matching for epoch {epoch}")
+    culled = 0
     with open(outfile, 'w') as fp:
         for norad, ep in sc.items():
             if cull_to is not None and norad not in cull_to:
+                culled += 1
                 continue
             minep = np.abs(np.array(ep['epochs']) - epoch).argmin()
             usepoch = ep['epochs'][minep]
             for i in range(3):
                 print(ep[usepoch][i], file=fp)
+    print(f"Writing {sc_tot-culled} to {outfile}")
 
 
 def match_epoch(mepoch, dtime=None):
