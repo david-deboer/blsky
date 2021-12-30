@@ -1,6 +1,8 @@
 blsky contains modules to investigate technosignature observing.  This primarily relates to rfi and drift of narrow-band signals.
 
-satpos  implements the sgp4 orbital tracking code (http://www.celestrak.com/NORAD/elements/) and some other code to prep the data. https://orbit.ing-now.com/
+satpos  implements the sgp4 orbital tracking code (http://www.celestrak.com/NORAD/elements/) and some other code to prep the data.
+
+( https://orbit.ing-now.com/ )
 
 TLE handling
 ============
@@ -9,7 +11,7 @@ The TLE files are maintained in the /tle subdirectory and may be updated using t
 May need to use tlearc.py to get TLE values of a specific epoch from space-track.org.
 
 
-Install
+Install - must be in blsky install directory
 =======
 1 - `pip install .`
 2 - `install_satpos_exe.py`
@@ -17,10 +19,10 @@ Install
 Before you run
 ==============
 1 - make sure TLE file(s) are what you want (see above)
-2 - make sure the location information is there (in satpos.obs, but update in satpos_obs.yaml, then run
-`satpos_make_obs.py`)
+2 - make sure the location information is there as desired
+    (update in satpos_obs.yaml, then run `satpos_make_obs.py` - must be in same directory)
 
-How-to
+How-to - generally need to be in directory containing satpos_obs.yaml, satpos.obs and satpos_cfg.yaml
 ======
 1 - Edit satpos_cfg.yaml for run parameters
 2 - `satpos_script.py <tlefilename>` to generate a shell script for satpos (default is 'active')

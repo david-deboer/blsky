@@ -18,47 +18,40 @@ PKS:
   name: Parkes NSW Australia
   tz: 10
 AR:
-  alt: '497'
-  horizon: '10'
+  alt: 497
+  horizon: 10
   lat: '18:20:36.60'
   lon: '-66:45:11.10'
   name: Arecibo, PR
-  tz: '0'
+  tz: -4
 ATA:
-  alt: '1022'
+  alt: 1022
   horizon: '10'
   lat: '40:49:02.5'
   lon: '-121:28:18.5'
   name: HCRO
-  tz: '-8'
+  tz: -8
 BR:
-  alt: '250'
+  alt: 250
   horizon: '10'
   lat: '48:07:52.42'
   lon: '-119:40:59.80'
   name: Brewster, WA
-  tz: '-8'
-OVRO:
-  alt: '1222'
-  horizon: '10'
-  lat: '37:14:02'
-  lon: '-118:16:56'
-  name: OVRO
-  tz: '-8'
+  tz: -8
 EB:
-  alt: '319'
-  horizon: '10'
+  alt: 319
+  horizon: 10
   lat: '50:31:30'
   lon: '6:53:00.3'
   name: Effelsberg, Germany
-  tz: '0'
+  tz: 1
 FD:
-  alt: '1606'
-  horizon: '10'
+  alt: 1606
+  horizon: 10
   lat: '30:38:06.11'
   lon: '-103:56:41.34'
   name: Fort Davis, TX
-  tz: '0'
+  tz: -6
 ORIGIN:
   alt: 0.0
   horizon: 0.0
@@ -74,86 +67,86 @@ MARJUM:
   name: Marjum Pass, UT
   tz: -7
 GBT:
-  alt: '147.8'
-  horizon: '10'
+  alt: 147.8
+  horizon: 10
   lat: '38:25:59.24'
   lon: '-79:50:23.41'
   name: Green Bank, WV
-  tz: '-5'
+  tz: -5
 GDSCC:
-  alt: '747'
-  horizon: '10'
+  alt: 747
+  horizon: 10
   lat: '35:25:36'
   lon: '-116:53:24'
   name: Goldstone
-  tz: '-8'
+  tz: -8
 HN:
-  alt: '296'
-  horizon: '10'
+  alt: 296
+  horizon: 10
   lat: '42:56:00.99'
   lon: '-71:59:11.69'
   name: Hancock, NH
-  tz: '0'
+  tz: -5
 KP:
-  alt: '1902'
-  horizon: '10'
+  alt: 1902
+  horizon: 10
   lat: '31:57:22.70'
   lon: '-111:36:44.72'
   name: Kitt Peak, AZ
-  tz: '0'
+  tz: -7
 LA:
-  alt: '1962'
-  horizon: '10'
+  alt: 1962
+  horizon: 10
   lat: '35:46:30.45'
   lon: '-106:14:44.15'
   name: Los Alamos, NM
-  tz: '-7'
+  tz: -7
 MK:
-  alt: '3763'
-  horizon: '10'
+  alt: 3763
+  horizon: 10
   lat: '19:48:04.97'
   lon: '-155:27:19.81'
   name: Mauna Kea, HI
-  tz: '0'
+  tz: -10
 NL:
-  alt: '222'
-  horizon: '10'
+  alt: 222
+  horizon: 10
   lat: '41:46:17.13'
   lon: '-91:34:26.88'
   name: North Liberty, IA
-  tz: '0'
-OV:
-  alt: '1196'
-  horizon: '10'
+  tz: -6
+OVRO:
+  alt: 1196
+  horizon: 10
   lat: '37:13:53.95'
   lon: '-118:16:37.37'
   name: Owens Valley, CA
-  tz: '-8'
+  tz: -8
 PT:
-  alt: '2365'
-  horizon: '10'
+  alt: 2365
+  horizon: 10
   lat: '34:18:03.61'
   lon: '-108:07:09.06'
   name: Pie Town, NM
-  tz: '-7'
+  tz: -7
 SC:
-  alt: '16'
-  horizon: '10'
+  alt: 16
+  horizon: 10
   lat: '17:45:23.68'
   lon: '-64:35:01.07'
   name: Saint Croix, VI
-  tz: '0'
+  tz: -4
 UCB:
-  alt: '100'
-  horizon: '10'
+  alt: 100
+  horizon: 10
   lat: '37:52:17.72'
   lon: '-122:16:21.9'
   name: UCB
-  tz: '-8'
+  tz: -8
 Y27:
-  alt: '2115'
-  horizon: '10'
+  alt: 2115
+  horizon: 10
   lat: '34:04:43.75'
   lon: '-107:37:05.91'
   name: EVLA, NM
-  tz: '-7'
+  tz: -7

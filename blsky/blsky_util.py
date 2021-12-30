@@ -25,7 +25,7 @@ def deg(dms):
 
 class Observatories:
     def __init__(self, obsfile='satpos_obs.yaml', sec_precision=2):
-        with open('satpos_obs.yaml', 'r') as fp:
+        with open(obsfile, 'r') as fp:
             self.obs = yaml.load(fp, Loader=yaml.Loader)
         self.proc_dict()
 
