@@ -1,4 +1,6 @@
 #! /usr/bin/env python
+#
+# Started with :
 # STTest.py (copyright 2019 by Andrew Stokes, original file named differently)
 #
 # Simple Python app to extract resident space object history data from www.space-track.org into
@@ -22,16 +24,18 @@ import sys
 from blsky import satcensus
 
 
+# Run parameters
+elo = '2021-05-22'
+ehi = '2021-06-02'
+match_epoch = 2115230  # (100 * YYDDD.ddd for observations per above)
+aggfile = 'agg.tle'
+NORAD_CAT_ID_range = range(51001, 1000)
+
+
 class MyError(Exception):
     def __init___(self, args):
         Exception.__init__(self, "my exception was raised with arguments {0}".format(args))
         self.args = args
-
-# See https://www.space-track.org/documentation for details on REST queries
-# "Find Starlinks" query finds all satellites w/ NORAD_CAT_ID > 40000 & OBJECT_NAME matching
-# STARLINK*, 1 line per sat;
-# the "OMM Starlink" query gets all Orbital Mean-Elements Messages (OMM) for a specific
-# NORAD_CAT_ID in JSON format.
 
 
 uriBase = "https://www.space-track.org"
@@ -46,16 +50,8 @@ requestBuild = "/class/tle/NORAD_CAT_ID/${NCILO}--${NCIHI}/EPOCH/${EPLO}--${EPHI
 # configUsr = input()
 # print('Username capture complete.\n')
 # configPwd = getpass.getpass(prompt='Securely enter your Space-Track.org password (minimum of 15 characters):  ')  # noqa
-
-elo = '2021-05-22'
-ehi = '2021-06-02'
-match_epoch = 2115230  # (100 * YYDDD.ddd for observations per above)
-aggfile = 'agg.tle'
-NORAD_CAT_ID_range = range(51001, 1000)
-
 configUsr = 'ddeboer@berkeley.edu'
 configPwd = 'blc1-technoSignature'
-tleout = 'tle.out'
 siteCred = {'identity': configUsr, 'password': configPwd}
 
 
