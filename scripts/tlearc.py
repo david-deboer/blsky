@@ -22,14 +22,22 @@ import requests
 import time
 import sys
 from blsky import satcensus
+import yaml
+from datetime import datetime
 
 
 # Run parameters
-elo = '2021-05-22'
-ehi = '2021-06-02'
-match_epoch = 2115230  # (100 * YYDDD.ddd for observations per above)
-aggfile = 'agg.tle'
-NORAD_CAT_ID_range = range(51001, 1000)
+with open('satpos_cfg.yaml', 'r') as fp:
+    runpar = yaml.load(fp, Loader=yaml.Loader)['tlearc']
+epoch_lo = runpar['epoch_lo']
+epoch_hi = runpar['epoch_hi']
+match_epoch = satcensus.match_epoch(runpar['match_epoch'], epoch_hi)
+if isinstance(epoch_lo, datetime):
+    epoch_lo = epoch_lo.strftime('%Y-%m-%d')
+if isinstance(epoch_hi, datetime):
+    epoch_hi = epoch_hi.strftime('%Y-%m-%d')
+
+NORAD_CAT_ID_range = range(0, 51001, 1000)
 
 
 class MyError(Exception):
@@ -82,7 +90,7 @@ with requests.Session() as session:
         nlo = f"{ncid:05d}"
         nhi = f"{ncid+999:05d}"
         query = requestBuild.replace('${NCILO}', nlo).replace('${NCIHI}', nhi)\
-                            .replace('${EPLO}', elo).replace('${EPHI}', ehi)
+                            .replace('${EPLO}', epoch_lo).replace('${EPHI}', epoch_hi)
         print(query)
         resp = session.get(uriBase + requestCmdAction + query)
 
@@ -101,5 +109,18 @@ with requests.Session() as session:
             maxs = 1
     session.close()
 
-print(f'\nCompleted session.  Aggregating to {aggfile}.')
-satcensus.agg_tle(afiles, epoch=match_epoch, outfile=aggfile)
+print('\nCompleted session.')
+if runpar['auto_agg']:
+    cull_to = runpar['cull_to']
+    if isinstance(cull_to, str):
+        if cull_to.lower() == 'none':
+            cull_to = None
+        elif ',' in cull_to:
+            cull_to = cull_to.split(',')
+        else:
+            try:
+                cull_to = list(satcensus.read_tle_file(cull_to).keys())
+            except:  # noqa
+                cull_to = None
+    print(f"Aggregating to {runpar['aggfile']}.")
+    satcensus.agg_tle(afiles, epoch=match_epoch, outfile=runpar['aggfile'], cull_to=cull_to)

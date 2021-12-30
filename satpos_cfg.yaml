@@ -11,3 +11,10 @@ config:
     start:  'either absolute Y M D H M S (==6, local/utc) or offset from now D H M S (==4)'
     stop: 'either absolute Y M D H M S(==6, local/utc) or offset from start D H M S (==4)'
     step: 'minutes'
+tlearc:
+  auto_agg: true
+  epoch_lo: 2021-05-22
+  epoch_hi: 2021-06-02
+  match_epoch: auto
+  aggfile: agg.tle
+  cull_to: /Users/ddeboer/Documents/ubase/Code/blsky/tle/active.tle

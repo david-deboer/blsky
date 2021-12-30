@@ -2,21 +2,12 @@ blsky contains modules to investigate technosignature observing.  This primarily
 
 satpos  implements the sgp4 orbital tracking code (http://www.celestrak.com/NORAD/elements/) and some other code to prep the data. https://orbit.ing-now.com/
 
+TLE handling
+============
 The TLE files are maintained in the /tle subdirectory and may be updated using the script 'updatetle.py' while in that directory.  There is a branch of this repo called tle_archive, so please update in that branch as well as the main branch.  Use a commit message of the form `TLE update 2021-12-15 11:50:10`.  The tle_archive branch gets updated weekly on Sunday night.  DO NOT MERGE THE tle_archive BRANCH WITH MAIN!  (I intend to write up modules to pull archived tles out.)
 
---satpos--
-Given TLE (from a file, location set in satpos_cfg.yaml) it writes a file:
-    'sp_{tlefilename}{entry_number_in_file:04d}.out' which contains a track over the period specified in satpos_cfg.yaml (which must be in that directory)
-e.g. satpos active 123
+May need to use tlearc.py to get TLE values of a specific epoch from space-track.org.
 
-
---sattrack--
-from satpos import sattrack
-reads in the .out files from above and computes various parameters.
-
---satcensus--
-from satpos import satcensus
-random modules using sattrack (or not) to look at satellite data.
 
 Install
 =======
@@ -25,7 +16,7 @@ Install
 
 Before you run
 ==============
-1 - make sure TLE file(s) in tle_archive are what you want (may need `updatetle.py` or above GIT)
+1 - make sure TLE file(s) are what you want (see above)
 2 - make sure the location information is there (in satpos.obs, but update in satpos_obs.yaml, then run
 `satpos_make_obs.py`)
 
