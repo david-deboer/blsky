@@ -6,6 +6,42 @@ from os import chmod
 import yaml
 
 
+def agg_tle(tlefiles, epoch=2115230, outfile='agg.tle'):
+    lno = ['0', '0', '0']
+    sc = {}
+    sc_counter = 0
+    for this_file in tlefiles:
+        print(this_file)
+        with open(this_file, 'r') as ttfp:
+            for line in ttfp:
+                data = line.split()
+                if len(data) < 2:
+                    continue
+                this_lno = int(data[0])
+                lno[this_lno] = line.strip()
+                if this_lno == 1:
+                    this_epoch = int(float(data[3]) * 100.0)
+                elif this_lno == 2:
+                    sc_counter += 1
+                    this_sc = int(data[1])
+                    if this_sc in sc:
+                        sc[this_sc][this_epoch] = [lno[0], lno[1], lno[2]]
+                        sc[this_sc]['epochs'].append(this_epoch)
+                    else:
+                        sc[this_sc] = {this_epoch: [lno[0], lno[1], lno[2]]}
+                        sc[this_sc]['epochs'] = [this_epoch]
+                        lno = ['0', '0', '0']
+    print(f"{sc_counter} satellites")
+    import numpy as np
+    with open(outfile, 'w') as fp:
+        for sc, ep in sc.items():
+            minep = np.abs(np.array(ep['epochs']) - epoch).argmin()
+            usepoch = ep['epochs'][minep]
+            for i in range(3):
+                print(ep[usepoch][i], file=fp)
+    return sc
+
+
 def filter_drift(f=982e6, rng=[0.025, 0.05], absvalue=True,
                  trackfilelist='viewable.csv', path='output', addtag='out'):
     """
@@ -108,7 +144,7 @@ def find_viewable(satlist='satpos_active.sh', path='',
             data = line.split()
             if len(data) != 3 or data[0] != 'satpos':
                 continue
-            fname = f"sp_{data[1]}{int(data[2]):04d}.out"
+            fname = f"sp_{data[1]}{int(data[2]):07d}.out"
             fullfname = op.join(path, fname)
             previous_loc, loc = check_location(loc, fullfname)
             if previous_loc is None:
@@ -117,12 +153,12 @@ def find_viewable(satlist='satpos_active.sh', path='',
             elif previous_loc != loc:
                 raise RuntimeError(f"Locations don't agree:  {previous_loc} vs {loc}")
             if verbose:
-                print(f"Reading {fullfname}")
+                print(f"\rReading {fullfname}", end='')
             try:
                 s = sattrack.Track(fullfname)
                 s.view(loc)
             except:  # noqa
-                print(f"{fullfname} not read.")
+                print(" Warning - Track error.")
                 continue
             if rewrite_file:
                 s.rewrite_file(overwrite=True)
@@ -159,7 +195,7 @@ def find_viewable(satlist='satpos_active.sh', path='',
     viewable.close()
     notviewable.close()
 
-    print(f"LEO: {count.leo}")
+    print(f"\nLEO: {count.leo}")
     print(f"MEO: {count.meo}")
     print(f"GEO: {count.geo}")
     print(f"DEEP: {count.deep}")

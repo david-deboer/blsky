@@ -9,4 +9,6 @@ ap.add_argument('-q', '--quiet', help="Flag to stop progress print.",
                 action='store_true')
 args = ap.parse_args()
 
-satcensus.find_viewable(args.satfile, verbose=not args.quiet)
+satcensus.find_viewable(args.satfile,
+                        rewrite_file=True,
+                        verbose=not args.quiet)

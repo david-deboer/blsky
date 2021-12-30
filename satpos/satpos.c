@@ -15,7 +15,7 @@
 #undef VERBOSE
 int main(int argc, char *argv[])
 {
-  int argSC=0, argTLE=0, i, j, k, n, valid;
+  int argSC=0, argTLE=0, i, j, k, n, valid, verbose;
   char TLEprefix[25], TLEFile[100], SCName[40], SCSearch[10], line[100];
   char outname[70], outsatpos[70];
   const char * monstr[] = {"NULL", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
@@ -39,22 +39,22 @@ int main(int argc, char *argv[])
   elsetrec satrec;
 
   rad = 180.0 / pi;
+  verbose = 0;  // Make part of argv
   // ------------------------  implementation   --------------------------
 
   readObserver(&obs);
 
-  printf("%s\n", SGP4Version);
+  if (verbose)
+    printf("%s:  ", SGP4Version);
   if (argc > 1)
   {
     argTLE = 1;
     strcpy(TLEprefix, argv[1]);
-    printf("Using %s  ", TLEprefix);
   }
   if (argc > 2)
   {
     argSC = 1;
     sscanf(argv[2], "%d", &k);
-    printf(" %d\n", k);
   }
 
   // Get satellite TLE's
@@ -98,10 +98,10 @@ int main(int argc, char *argv[])
     getline(fp, longstr2, 110);
   }
   fclose(fp);
-
+  sprintf(outname, "sp_%s%07d.out", TLEprefix, k);
   for(i=strlen(SCName)-1;isspace(SCName[i]);--i)
     SCName[i]='\0';
-    printf("\n%s\n",SCName);
+  printf("%s  ->  %s\n",SCName, outname);
 
   //opsmode = 'a' best understanding of how afspc code works
   //opsmode = 'i' improved sgp4 resulting in smoother behavior
@@ -120,7 +120,6 @@ int main(int argc, char *argv[])
   getgravconst(whichconst, tumin, mu, radiusearthkm, xke, j2, j3, j4, j3oj2);
 
   // ---------------- setup files for operation ------------------
-  sprintf(outname, "sp_%s%04d.out", TLEprefix, k);
   outfile = fopen(outname, "w");
 
   // convert the char string to sgp4 elements
@@ -142,19 +141,24 @@ int main(int argc, char *argv[])
 
   jd = satrec.jdsatepoch;
   invjday( jd, year,mon,day,hr,min,sec );
-  printf("stk.v.4.3 \n"); // must use 4.3...
-  printf("ScenarioEpoch:  %3i %3s%5i%3i:%2i:%12.9f \n",day,monstr[mon],year,hr,min,sec);
-  printf("CoordinateSystem:  TEME-to-PEF\n\n");  //TEME (True Equator Mean Equinox) - PEF (Pseudo Earth Fixed)
-
+  if (verbose)
+  {
+    printf("stk.v.4.3 \n"); // must use 4.3...
+    printf("ScenarioEpoch:  %3i %3s%5i%3i:%2i:%12.9f \n",day,monstr[mon],year,hr,min,sec);
+    printf("CoordinateSystem:  TEME-to-PEF\n\n");  //TEME (True Equator Mean Equinox) - PEF (Pseudo Earth Fixed)
+  }
   // First do it for 'start'
   tsince = startmfe;
   sgp4 (whichconst, satrec,  tsince, ro,  vo);
   teme2pef(obs,jdstart,ro,&start);
   period = 2.0*pi/satrec.no;
 
-  printf("Period: %.3f [min]\n", period);
-  printf("Starting Position:\n\t(x,y,z,r):  %lf, %lf, %lf, %lf\n",ro[0],ro[1],ro[2],start.alt);
-  printf("\t(sub_lng, sub_lat, h):  %lf, %lf, %lf\n",start.lng,start.lat,start.h);
+  if (verbose)
+  {
+    printf("Period: %.3f [min]\n", period);
+    printf("Starting Position:\n\t(x,y,z,r):  %lf, %lf, %lf, %lf\n",ro[0],ro[1],ro[2],start.alt);
+    printf("\t(sub_lng, sub_lat, h):  %lf, %lf, %lf\n",start.lng,start.lat,start.h);
+  }
 
   // Write header
   fprintf(outfile, "#spacecraft name: %s\n", SCName);
@@ -201,7 +205,6 @@ int main(int argc, char *argv[])
         a, ecc, incl*rad, node*rad, argp*rad, nu*rad, m*rad,year,mon,day,hr,min,isec,msec);
     }
   }
-  printf("\nOutput to %s\n", outname);
   fclose(outfile);
 
   return 1;
@@ -264,11 +267,16 @@ int readObserver(struct observer *obs)
     exit(1);
   }
   if (tztype[0] == 'u')
-    obs->timeZone = 0.0;
+  {
+    obs->timeZone = 0;
+    obs->daylightSavings = 0;
+  }
+  utcconv = obs->timeZone + obs->daylightSavings;
+
   resetTime(&dt);
   if (nsa==6)
   {
-    dt.Hour = -1*(obs->timeZone + obs->daylightSavings);
+    dt.Hour = -1*utcconv;
     addTime(&(obs->tstart),dt);  /// Convert to UTC
   }
   else if (nsa==4)
@@ -295,7 +303,7 @@ int readObserver(struct observer *obs)
   resetTime(&dt);
   if (nso==6)
   {
-    dt.Hour = -1*(obs->timeZone + obs->daylightSavings);
+    dt.Hour = -1*utcconv;
     addTime(&(obs->tstop),dt);  /// Convert to UTC
   }
   else if (nso==4)
@@ -319,12 +327,12 @@ int readObserver(struct observer *obs)
   }
   obs->tstop.time = obs->tstop.Hour/24.0 + obs->tstop.Minute/24.0/60.0 + obs->tstop.Second/24.0/60.0/60.0;
 
-  utcconv = obs->timeZone + obs->daylightSavings;
-  printf("Start (UTC@%d):       %02d/%02d/%02d  %02d:%02d:%02d\n",utcconv,obs->tstart.Month,obs->tstart.Day,obs->tstart.Year,
+
+  printf("UTC@%d:    %02d/%02d/%02d  %02d:%02d:%02d - ",utcconv,obs->tstart.Month,obs->tstart.Day,obs->tstart.Year,
      obs->tstart.Hour,obs->tstart.Minute,(int)obs->tstart.Second);
-  printf("Stop (UTC@%d):        %02d/%02d/%02d  %02d:%02d:%02d\n",utcconv,obs->tstop.Month,obs->tstop.Day,obs->tstop.Year,
+  printf("%02d/%02d/%02d  %02d:%02d:%02d  ",obs->tstop.Month,obs->tstop.Day,obs->tstop.Year,
      obs->tstop.Hour,obs->tstop.Minute,(int)obs->tstop.Second);
-  printf("Step:                 %.3lf [min]\n",obs->tstep);
+  printf("@  %.3lf [min]\n",obs->tstep);
   return 1;
 }
 

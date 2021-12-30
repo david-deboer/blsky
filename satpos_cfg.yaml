@@ -1,11 +1,11 @@
 config:
   path_to_tle_files: /Users/ddeboer/Documents/ubase/Code/blsky/tle
   obs_file_to_use: /Users/ddeboer/Documents/ubase/Code/blsky/satpos.obs
-  obs_to_use: UCB
-  daylight_savings_time: 0
-  time_basis: utc  # local
-  start: 2021 12 9 0 0 0
-  stop: 0 0 30 0
+  obs_to_use: ATA
+  daylight_savings_time: 1
+  time_basis: utc
+  start: 2021 6 1 8 0 0
+  stop: 0 0 60 0
   step: 1
   help:
     start:  'either absolute Y M D H M S (==6, local/utc) or offset from now D H M S (==4)'

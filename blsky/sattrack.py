@@ -42,7 +42,7 @@ class Track(ephem.BaseEphem):
                     getattr(self, sp).append(df[i])
                 yr, mn, dy = int(data[14]), int(data[15]), int(data[16])
                 tmptimes.append(f"{yr}-{mn:02d}-{dy:02d}T{data[17].strip()}")
-        self.times.append(Time(tmptimes))  # bulk convert is faster
+        self.times = Time(tmptimes)  # bulk convert is faster
         for sp in satpar:
             if sp == 'since':
                 self.since = np.array(self.since) * 60.0  # convert to sec
