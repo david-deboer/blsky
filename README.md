@@ -26,7 +26,7 @@ How-to
 2 - `satpos_script.py <tlefilename>` to generate a shell script for satpos (default is 'active')
     writes:  satpos_<tlefilename>.sh:  script for satpos
 3 - `satpos_<tlefilename>.sh`
-4 - `viewable.py` will write viewable.csv and notviewable.csv and add info to the satpos files
+4 - `viewable.py <tlefilename.sh>` will write viewable.csv and notviewable.csv and add info to the satpos files
 5 - To count up a few things in the viewable/notviewable csv files
       from blsky import satcensus
       view, notview = satcensus.showdist()

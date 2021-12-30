@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
   verbose = 0;  // Make part of argv
   // ------------------------  implementation   --------------------------
 
-  readObserver(&obs);
+  readObserver(&obs, verbose);
 
   if (verbose)
     printf("%s:  ", SGP4Version);
@@ -101,7 +101,9 @@ int main(int argc, char *argv[])
   sprintf(outname, "sp_%s%07d.out", TLEprefix, k);
   for(i=strlen(SCName)-1;isspace(SCName[i]);--i)
     SCName[i]='\0';
-  printf("%s  ->  %s\n",SCName, outname);
+  printf("\r%s    (%s)                               ",outname, SCName);
+  if (verbose)
+    printf("\n");
 
   //opsmode = 'a' best understanding of how afspc code works
   //opsmode = 'i' improved sgp4 resulting in smoother behavior
@@ -132,10 +134,13 @@ int main(int argc, char *argv[])
   startmfe = (jdstart - satrec.jdsatepoch) * 1440.0;
   stopmfe  = (jdstop - satrec.jdsatepoch) * 1440.0;
   deltamin = obs.tstep;
-  if (startmfe < 0.0)
-    printf("WARNING: TLEs start after observing epoch (%lf days).\n",startmfe/1440.0);
-  if (startmfe > 43200.0)
-    printf("WARNING: TLEs are over a month old (%lf days).\n",startmfe/1440.0);
+  if (verbose)
+  {
+    if (startmfe < 0.0)
+      printf("WARNING: TLEs start after observing epoch (%lf days).\n",startmfe/1440.0);
+  }
+  if (fabs(startmfe/1440.0) > 7.5)
+    printf("WARNING: TLEs are over a week off (%lf days).\n",startmfe/1440.0);
   // call the propagator to get the initial state vector value
   sgp4 (whichconst, satrec,  0.0, ro,  vo);
 
@@ -211,7 +216,7 @@ int main(int argc, char *argv[])
 }
 
 /* Get observer and date data from config yaml (very picky one...)*/
-int readObserver(struct observer *obs)
+int readObserver(struct observer *obs, int verbose)
 {
   int nconv, nsa, nso, timeZone, utcconv, line_len, i;
   char line[300], code[8], *local_s, tztype[8], line2[200];
@@ -327,12 +332,14 @@ int readObserver(struct observer *obs)
   }
   obs->tstop.time = obs->tstop.Hour/24.0 + obs->tstop.Minute/24.0/60.0 + obs->tstop.Second/24.0/60.0/60.0;
 
-
-  printf("UTC@%d:    %02d/%02d/%02d  %02d:%02d:%02d - ",utcconv,obs->tstart.Month,obs->tstart.Day,obs->tstart.Year,
-     obs->tstart.Hour,obs->tstart.Minute,(int)obs->tstart.Second);
-  printf("%02d/%02d/%02d  %02d:%02d:%02d  ",obs->tstop.Month,obs->tstop.Day,obs->tstop.Year,
-     obs->tstop.Hour,obs->tstop.Minute,(int)obs->tstop.Second);
-  printf("@  %.3lf [min]\n",obs->tstep);
+  if (verbose)
+  {
+    printf("UTC@%d:    %02d/%02d/%02d  %02d:%02d:%02d - ",utcconv,obs->tstart.Month,obs->tstart.Day,obs->tstart.Year,
+       obs->tstart.Hour,obs->tstart.Minute,(int)obs->tstart.Second);
+    printf("%02d/%02d/%02d  %02d:%02d:%02d  ",obs->tstop.Month,obs->tstop.Day,obs->tstop.Year,
+       obs->tstop.Hour,obs->tstop.Minute,(int)obs->tstop.Second);
+    printf("@  %.3lf [min]\n",obs->tstep);
+  }
   return 1;
 }
 

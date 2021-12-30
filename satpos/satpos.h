@@ -52,7 +52,7 @@ struct observer {
 #define SQ(X)  ( (X)*(X) )
 #undef VERBOSE
 
-int readObserver(struct observer *obs);
+int readObserver(struct observer *obs, int verbose);
 int readLocation(struct observer *obs);
 int invxyz(double x, double y, double z, double *lng, double *lat, double *h);
 int teme2pef(struct observer obs, double jd, double *ro, struct observer *subsat);
