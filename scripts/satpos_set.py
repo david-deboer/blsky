@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 from blsky import satcensus
 import argparse
-from blsky.blsky_util import Observatories
+from blsky.obs_util import Observatories
 import yaml
 
 ap = argparse.ArgumentParser()

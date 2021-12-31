@@ -1,11 +1,11 @@
 from astropy import units as u
 from astropy.coordinates import SkyCoord, AltAz, EarthLocation, Angle
 import numpy as np
-from . import horizons, ephem, blsky_util
+from . import horizons, ephem, obs_util
 from . import my_dateutil as dateutil
 from argparse import Namespace
 
-locations = blsky_util.Observatories()
+locations = obs_util.Observatories()
 
 
 def getloc(name):
