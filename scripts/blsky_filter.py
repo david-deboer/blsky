@@ -15,7 +15,6 @@ ap.add_argument('-f', '--frequency', help='For drift, freq in Hz', default=1e9, 
 ap.add_argument('-r', '--range', help='For drift, range in Hz/s (r1,r2)', default='-0.5,0.5')
 ap.add_argument('-a', '--absvalue', help='For drift, use absolute value.',
                 action='store_true')
-ap.add_argument()
 args = ap.parse_args()
 
 if args.viewable:
