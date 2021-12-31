@@ -26,7 +26,7 @@ def filter_on_drift(f=982e6, rng=[0.025, 0.05], absvalue=True,
         if line[0] == '#':
             continue
         data = line.strip().split(',')
-        fname = data[0]
+        fname = f"{data[0]}.out"
         if verbose:
             print(f"\rReading {fname}", end='')
         s = sattrack.Track(fname)
