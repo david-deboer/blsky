@@ -21,7 +21,7 @@
 import requests
 import time
 import sys
-from blsky import satcensus
+from blsky import tle_util
 import yaml
 from datetime import datetime
 
@@ -31,7 +31,7 @@ with open('satpos_cfg.yaml', 'r') as fp:
     runpar = yaml.load(fp, Loader=yaml.Loader)['tlearc']
 epoch_lo = runpar['epoch_lo']
 epoch_hi = runpar['epoch_hi']
-match_epoch = satcensus.match_epoch(runpar['match_epoch'], epoch_hi)
+match_epoch = tle_util.match_epoch(runpar['match_epoch'], epoch_hi)
 if isinstance(epoch_lo, datetime):
     epoch_lo = epoch_lo.strftime('%Y-%m-%d')
 if isinstance(epoch_hi, datetime):
@@ -119,8 +119,8 @@ if runpar['auto_agg']:
             cull_to = cull_to.split(',')
         else:
             try:
-                cull_to = list(satcensus.read_tle_file(cull_to).keys())
+                cull_to = list(tle_util.read_tle_file(cull_to).keys())
             except:  # noqa
                 cull_to = None
     print(f"Aggregating to {runpar['aggfile']}.")
-    satcensus.agg_tle(afiles, epoch=match_epoch, outfile=runpar['aggfile'], cull_to=cull_to)
+    tle_util.agg_tle(afiles, epoch=match_epoch, outfile=runpar['aggfile'], cull_to=cull_to)
