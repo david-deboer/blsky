@@ -5,8 +5,8 @@ import os.path as op
 from os import chmod
 
 
-def filter_drift(f=982e6, rng=[0.025, 0.05], absvalue=True,
-                 trackfilelist='viewable.csv', path='output', addtag='out'):
+def filter_on_drift(f=982e6, rng=[0.025, 0.05], absvalue=True,
+                    trackfilelist='viewable.csv', verbose=False):
     """
     Uses the satellites written in find_viewable below and
     filters on drift range from the .out files.
@@ -14,35 +14,38 @@ def filter_drift(f=982e6, rng=[0.025, 0.05], absvalue=True,
     Writes outsats.csv with the list and returns a dict of the relevant portion
     of track.
     """
-    outsats = open('outsats.csv', 'w')
+    outsats = open('drift_filtered.csv', 'w')
+    try:
+        satslist = open(trackfilelist, 'r')
+    except FileNotFoundError:
+        print("Need to run for viewable first 'blsky_filter.py -v'")
     drifts = {}
-    with open(trackfilelist, 'r') as satslist:
-        loc = satslist.readline().strip()
-        print("Location: ", loc)
-        for line in satslist:
-            data = line.strip().split(',')
-            if data[0] == 'file':
-                continue
-            fname = data[0]
-            if addtag is not None:
-                fname = f"{fname}.{addtag}"
-            fname = op.join(path, fname)
-            s = sattrack.Track(fname)
-            s.view(loc)
-            s.rates(f)
-            for i, drift in enumerate(s.vis(s.drift)):
-                chkdrift = drift
-                if absvalue:
-                    chkdrift = abs(drift)
-                if s.el[i] > 0.0 and chkdrift > rng[0] and chkdrift < rng[1]:
-                    drifts.setdefault(s.satnum, Namespace(t=[], drift=[], el=[], period=[]))
-                    drifts[s.satnum].t.append(s.dtime[i])
-                    drifts[s.satnum].drift.append(drift)
-                    drifts[s.satnum].el.append(s.el[i])
-                    drifts[s.satnum].period.append(s.period)
-                    print(f"{fname},{s.satnum},{s.since[i]},{drift},{s.x[i]},{s.y[i]},{s.z[i]},"
-                          f"{s.el[i]},{s.period}", file=outsats)
+    loc = satslist.readline().strip().strip('#').strip()
+    print("Location: ", loc)
+    for line in satslist:
+        if line[0] == '#':
+            continue
+        data = line.strip().split(',')
+        fname = data[0]
+        if verbose:
+            print(f"\rReading {fname}", end='')
+        s = sattrack.Track(fname)
+        s.view(loc)
+        s.rates(f)
+        for i, drift in enumerate(s.vis(s.drift)):
+            chkdrift = drift
+            if absvalue:
+                chkdrift = abs(drift)
+            if s.el[i] > 0.0 and chkdrift > rng[0] and chkdrift < rng[1]:
+                drifts.setdefault(s.satnum, Namespace(t=[], drift=[], el=[], period=[]))
+                drifts[s.satnum].t.append(s.times[i])
+                drifts[s.satnum].drift.append(drift)
+                drifts[s.satnum].el.append(s.el[i])
+                drifts[s.satnum].period.append(s.period)
+                print(line.strip(), file=outsats)
     outsats.close()
+    satslist.close()
+    print("Writing drift_filtered.csv")
     return drifts
 
 

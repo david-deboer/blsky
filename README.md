@@ -29,7 +29,8 @@ How-to run - need to be in directory containing config file (satpos_cfg.yaml)
     - writes script satpos_<tlefilename>.sh
     - updates satpos.obs (can skip with -s flag)
 3 - `satpos_<tlefilename>.sh` to run satpos program with desired satellites
-4 - `viewable.py <tlefilename.sh>` will write viewable.csv and notviewable.csv and add info to the satpos files
+4 - `blsky_filter.py -v <tlefilename.sh>` will write viewable.csv and notviewable.csv and add info to the satpos files
+5 - `blsky_filter.py -d <>` if desired, filter on drift range
 
 How-to look at the results - need to be in same directory
 ======
