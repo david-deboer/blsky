@@ -151,12 +151,12 @@ class Track(ephem.BaseEphem):
         self.viewed = True
 
     def rates(self, f=982E6):
-        self.freq = f
+        self.freq = f / u.second
         self.V = (self.xdot*self.R.x + self.ydot*self.R.y + self.zdot*self.R.z) / self.D
-        self.doppler = (np.array(self.V) / self.c0) * f
+        self.doppler = (self.V / self.c0) * self.freq
         self.drift = [0.0]
         for i in range(1, len(self.doppler)):
-            dt = self.since[i] - self.since[i-1]
+            dt = (self.since[i] - self.since[i-1]) * u.second
             dd = self.doppler[i] - self.doppler[i-1]
             self.drift.append(dd/dt)
         self.drift[0] = self.drift[1]
