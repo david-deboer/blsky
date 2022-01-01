@@ -20,6 +20,7 @@ try:
     with open(args.cfgfile, 'r') as fp:
         cfg = yaml.load(fp, Loader=yaml.Loader)
 except FileNotFoundError:
+    print("No config file was found -- setting obs file and tle path to nulls.")
     cfg = {'obs_yaml_to_use': '', 'obs_file_to_use': '', 'path_to_tle_files': None}
 if args.no_config_path:
     cfg['path_to_tle_files'] = None
