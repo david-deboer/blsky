@@ -3,12 +3,12 @@ import requests
 from os import path
 import argparse
 
-ap = argparse.ArgumentParser()
-ap.add_argument('--base-url', dest='base_url', help="Base url for tles",
-                default='http://www.celestrak.com/NORAD/elements/')
-ap.add_argument('--base-path', dest='base_path', help="Base path for tles",
-                default='.')
-args = ap.parse_args()
+# ap = argparse.ArgumentParser()
+# ap.add_argument('--base-url', dest='base_url', help="Base url for tles",
+#                 default='http://www.celestrak.com/NORAD/elements/')
+# ap.add_argument('--base-path', dest='base_path', help="Base path for tles",
+#                 default='.')
+# args = ap.parse_args()
 
 
 def updatetle(base_path, base_url):
