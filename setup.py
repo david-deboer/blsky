@@ -2,6 +2,7 @@
 # -*- mode: python; coding: utf-8 -*-
 # Copyright 2021 David DeBoer
 # Licensed under the 2-clause BSD license.
+# https://www.py4u.net/discuss/11616 for post-install
 
 from setuptools import setup
 import glob

@@ -12,7 +12,7 @@ args = ap.parse_args()
 
 
 def updatetle(base_path, base_url):
-    master_file = requests.get(path.join(base_url, 'master.asp'))
+    master_file = requests.get(base_url)
     master = master_file.text.splitlines()
     tlefiles = {}
     base_path = path.expanduser(base_path)
