@@ -22,6 +22,7 @@ def updatetle(base_path, base_url):
     print('Reading Celestrak master file')
     for line in master:
         data = line.split('"')
+        print(data)
         for word in data:
             if '.txt' in word and not word.startswith('/'):
                 description = line.split('>')[2].split('(')[0].strip()
