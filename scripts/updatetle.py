@@ -31,7 +31,7 @@ def updatetle(base_path, base_url):
                     num = '-'
                 tlefiles[word] = "{} [{}]".format(description, num)
                 break
-
+    return tlefiles
     # with open(path.join(base_path, 'master.dat'), 'w') as master:
     #     for lll in tlefiles:
     #         useThis = True
