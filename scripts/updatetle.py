@@ -32,21 +32,21 @@ def updatetle(base_path, base_url):
                 tlefiles[word] = "{} [{}]".format(description, num)
                 break
 
-    with open(path.join(base_path, 'master.dat'), 'w') as master:
-        for lll in tlefiles:
-            useThis = True
-            for ig in ignore:
-                if ig in tlefiles[lll].lower():
-                    useThis = False
-            if useThis:
-                a = lll.split('.')
-                outfile = a[0]+'.tle'
-                print('Reading %s:  %s' % (lll, tlefiles[lll]))
-                sat = requests.get(path.join(base_url, lll)).text.splitlines()  # noqa
-                with open(path.join(base_path, outfile), 'w') as fp:
-                    for line in sat:
-                        print(line, file=fp)
-                print("{}:  {}".format(outfile, tlefiles[lll]), file=master)
+    # with open(path.join(base_path, 'master.dat'), 'w') as master:
+    #     for lll in tlefiles:
+    #         useThis = True
+    #         for ig in ignore:
+    #             if ig in tlefiles[lll].lower():
+    #                 useThis = False
+    #         if useThis:
+    #             a = lll.split('.')
+    #             outfile = a[0]+'.tle'
+    #             print('Reading %s:  %s' % (lll, tlefiles[lll]))
+    #             sat = requests.get(path.join(base_url, lll)).text.splitlines()  # noqa
+    #             with open(path.join(base_path, outfile), 'w') as fp:
+    #                 for line in sat:
+    #                     print(line, file=fp)
+    #             print("{}:  {}".format(outfile, tlefiles[lll]), file=master)
 
 
 if __name__ == '__main__':
