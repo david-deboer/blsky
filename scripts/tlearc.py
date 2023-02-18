@@ -32,9 +32,9 @@ with open('satpos_cfg.yaml', 'r') as fp:
 epoch_lo = runpar['epoch_lo']
 epoch_hi = runpar['epoch_hi']
 match_epoch = tle_util.match_epoch(runpar['match_epoch'], epoch_hi)
-if isinstance(epoch_lo, datetime):
+if not isinstance(epoch_lo, str):
     epoch_lo = epoch_lo.strftime('%Y-%m-%d')
-if isinstance(epoch_hi, datetime):
+if not isinstance(epoch_hi, str):
     epoch_hi = epoch_hi.strftime('%Y-%m-%d')
 
 NORAD_CAT_ID_range = range(0, 51001, 1000)
