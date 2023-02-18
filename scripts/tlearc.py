@@ -27,11 +27,21 @@ from datetime import datetime
 
 
 # Run parameters
-with open('satpos_cfg.yaml', 'r') as fp:
-    runpar = yaml.load(fp, Loader=yaml.Loader)['tlearc']
+# Comment out for now...
+# with open('satpos_cfg.yaml', 'r') as fp:
+#     runpar = yaml.load(fp, Loader=yaml.Loader)['tlearc']
+runpar = {
+  'auto_agg': True,
+  'epoch_lo': '2021-05-22',
+  'epoch_hi': '2021-06-02',
+  'match_epoch': 'auto',
+  'aggfile': 'agg.tle',
+  'cull_to': '/indirect/o/ddeboer/blsky/tle/active.tle'
+  }
 epoch_lo = runpar['epoch_lo']
 epoch_hi = runpar['epoch_hi']
-match_epoch = tle_util.match_epoch(runpar['match_epoch'], epoch_hi)
+# match_epoch = tle_util.match_epoch(runpar['match_epoch'], epoch_hi)
+match_epoch = tle_util.match_epoch(runpar['match_epoch'], datetime.now())
 if not isinstance(epoch_lo, str):
     epoch_lo = epoch_lo.strftime('%Y-%m-%d')
 if not isinstance(epoch_hi, str):
