@@ -40,6 +40,7 @@ runpar = {
   }
 USE_NOW30 = True  # Override to use now-30, i.e. now - 30 days
 NORAD_CAT_ID_range = range(0, 51001, 1000)
+NORAD_CAT_ID_range = range(0, 1001, 1000)
 
 
 epoch_lo = runpar['epoch_lo']
@@ -61,9 +62,9 @@ uriBase = "https://www.space-track.org"
 requestLogin = "/ajaxauth/login"
 requestCmdAction = "/basicspacedata/query"
 if USE_NOW30:
-    requestBuild = "/class/tle/NORAD_CAT_ID/${NCILO}--${NCIHI}/EPOCH/now-30/orderby/EPOCH asc/format/3le/emptyresult/show"  # noqa
+    requestBuild = "/class/gp/NORAD_CAT_ID/${NCILO}--${NCIHI}/EPOCH/>now-30/orderby/EPOCH asc/format/3le/emptyresult/show"  # noqa
 else:
-    requestBuild = "/class/tle/NORAD_CAT_ID/${NCILO}--${NCIHI}/EPOCH/${EPLO}--${EPHI}/orderby/EPOCH asc/format/3le/emptyresult/show"  # noqa
+    requestBuild = "/class/gp/NORAD_CAT_ID/${NCILO}--${NCIHI}/EPOCH/${EPLO}--${EPHI}/orderby/EPOCH asc/format/3le/emptyresult/show"  # noqa
     
 
 # Log in to personal account obtained by registering for free at https://www.space-track.org/auth/createAccount  # noqa
