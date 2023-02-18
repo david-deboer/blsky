@@ -22,7 +22,7 @@ import requests
 import time
 import sys
 from blsky import tle_util
-import yaml
+# import yaml
 from datetime import datetime
 
 
@@ -38,6 +38,10 @@ runpar = {
   'aggfile': 'agg.tle',
   'cull_to': '/indirect/o/ddeboer/blsky/tle/active.tle'
   }
+USE_NOW30 = True  # Override to use now-30, i.e. now - 30 days
+NORAD_CAT_ID_range = range(0, 51001, 1000)
+
+
 epoch_lo = runpar['epoch_lo']
 epoch_hi = runpar['epoch_hi']
 # match_epoch = tle_util.match_epoch(runpar['match_epoch'], epoch_hi)
@@ -46,10 +50,6 @@ if not isinstance(epoch_lo, str):
     epoch_lo = epoch_lo.strftime('%Y-%m-%d')
 if not isinstance(epoch_hi, str):
     epoch_hi = epoch_hi.strftime('%Y-%m-%d')
-use_now30 = True  # Override to use now-30, i.e. now - 30 days
-
-NORAD_CAT_ID_range = range(0, 51001, 1000)
-
 
 class MyError(Exception):
     def __init___(self, args):
@@ -60,7 +60,7 @@ class MyError(Exception):
 uriBase = "https://www.space-track.org"
 requestLogin = "/ajaxauth/login"
 requestCmdAction = "/basicspacedata/query"
-if use_now30:
+if USE_NOW30:
     requestBuild = "/class/tle/NORAD_CAT_ID/${NCILO}--${NCIHI}/EPOCH/now-30/orderby/EPOCH asc/format/3le/emptyresult/show"  # noqa
 else:
     requestBuild = "/class/tle/NORAD_CAT_ID/${NCILO}--${NCIHI}/EPOCH/${EPLO}--${EPHI}/orderby/EPOCH asc/format/3le/emptyresult/show"  # noqa
