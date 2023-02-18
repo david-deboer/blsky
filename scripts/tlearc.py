@@ -95,8 +95,9 @@ with requests.Session() as session:
         nhi = f"{ncid+999:05d}"
         query = requestBuild.replace('${NCILO}', nlo).replace('${NCIHI}', nhi)\
                             .replace('${EPLO}', epoch_lo).replace('${EPHI}', epoch_hi)
-        print(query)
-        resp = session.get(uriBase + requestCmdAction + query)
+        full_query = uriBase + requestCmdAction + query
+        print(full_query)
+        resp = session.get(full_query)
 
         if resp.status_code != 200:
             print(resp)
