@@ -36,6 +36,7 @@ if not isinstance(epoch_lo, str):
     epoch_lo = epoch_lo.strftime('%Y-%m-%d')
 if not isinstance(epoch_hi, str):
     epoch_hi = epoch_hi.strftime('%Y-%m-%d')
+use_now30 = True  # Override to use now-30, i.e. now - 30 days
 
 NORAD_CAT_ID_range = range(0, 51001, 1000)
 
@@ -49,8 +50,11 @@ class MyError(Exception):
 uriBase = "https://www.space-track.org"
 requestLogin = "/ajaxauth/login"
 requestCmdAction = "/basicspacedata/query"
-requestBuild = "/class/tle/NORAD_CAT_ID/${NCILO}--${NCIHI}/EPOCH/${EPLO}--${EPHI}/orderby/EPOCH asc/format/3le/emptyresult/show"  # noqa
-
+if use_now30:
+    requestBuild = "/class/tle/NORAD_CAT_ID/${NCILO}--${NCIHI}/EPOCH/now-30/orderby/EPOCH asc/format/3le/emptyresult/show"  # noqa
+else:
+    requestBuild = "/class/tle/NORAD_CAT_ID/${NCILO}--${NCIHI}/EPOCH/${EPLO}--${EPHI}/orderby/EPOCH asc/format/3le/emptyresult/show"  # noqa
+    
 
 # Log in to personal account obtained by registering for free at https://www.space-track.org/auth/createAccount  # noqa
 # import getpass
