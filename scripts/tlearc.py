@@ -118,8 +118,8 @@ with requests.Session() as session:
             print(resp.text, file=fp)
 
         maxs += 1
-        if maxs > 18:
-            print('\nSnoozing for 60 secs for rate limit reasons (max 20/min and 200/hr).')
+        if maxs > 25:
+            print('\nSnoozing for 60 secs for rate limit reasons (max 30/min and 300/hr).')
             countdown(60)
             maxs = 1
     session.close()
