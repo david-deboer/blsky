@@ -16,7 +16,6 @@ spire.tle:  Spire
 geo.tle:  Active Geosynchronous
 intelsat.tle:  Intelsat
 ses.tle:  SES
-iridium.tle:  Iridium
 iridium-next.tle:  Iridium NEXT 
 starlink.tle:  Starlink
 oneweb.tle:  OneWeb
@@ -27,22 +26,16 @@ amateur.tle:  Amateur Radio
 x-comm.tle:  Experimental Comm
 other-comm.tle:  Other Comm
 satnogs.tle:  SatNOGS
-gorizont.tle:  Gorizont
-raduga.tle:  Raduga
-molniya.tle:  Molniya
 gnss.tle:  GNSS
 gps-ops.tle:  GPS Operational
 glo-ops.tle:  GLONASS Operational
 galileo.tle:  Galileo
 beidou.tle:  Beidou
 sbas.tle:  Satellite-Based Augmentation System (WAAS/EGNOS/MSAS)
-nnss.tle:  Navy Navigation Satellite System (NNSS)
-musson.tle:  Russian LEO Navigation
 science.tle:  Space & Earth Science
 geodetic.tle:  Geodetic
 engineering.tle:  Engineering
 education.tle:  Education
-military.tle:  Miscellaneous Military
 radar.tle:  Radar Calibration
 cubesat.tle:  CubeSats
 other.tle:  Other Satellites
