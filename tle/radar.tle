@@ -1,33 +1,30 @@
-CALSPHERE 1             
-1 00900U 64063C   23361.58497140  .00000996  00000+0  10367-2 0  9993
-2 00900  90.1966  51.7659 0028107 139.5098 316.5402 13.74690490947316
-CALSPHERE 2             
-1 00902U 64063E   23361.62877236  .00000091  00000+0  12412-3 0  9998
-2 00902  90.2118  55.2537 0017390 333.0539 150.3934 13.52776209734233
-LCS 1                   
-1 01361U 65034C   23360.82207718 -.00000003  00000+0 -15024-2 0  9996
-2 01361  32.1359 161.9182 0004774  97.3742 262.7298  9.89304536120420
-TEMPSAT 1               
-1 01512U 65065E   23361.58038022  .00000078  00000+0  13961-3 0  9991
-2 01512  89.9432 214.8873 0068047 263.1800 150.7036 13.33499479839750
-CALSPHERE 4A            
-1 01520U 65065H   23361.57337397  .00000146  00000+0  26311-3 0  9995
-2 01520  89.9589 128.8579 0070484 129.4860   2.2318 13.36019431842170
-OPS 5712 (P/L 160)      
-1 02826U 67053A   23361.57676161  .00007504  00000+0  17003-2 0  9991
-2 02826  69.9270  54.6677 0009502 284.7627  75.2457 14.56411439933801
-OPS 5712 (P/L 153)      
-1 02874U 67053H   23361.12110580  .00000111  00000+0  11859-3 0  9994
-2 02874  69.9732 250.5456 0010315 283.3371  76.6585 13.96536153880682
-SURCAL 150B             
-1 02909U 67053J   23361.56916598  .00015500  00000+0  23256-2 0  9995
-2 02909  69.9434  12.8778 0007886 300.4618  59.5749 14.74628460945538
-RIGIDSPHERE 2 (LCS 4)   
-1 05398U 71067E   23361.59101866  .00001280  00000+0  43152-3 0  9995
-2 05398  87.6240 228.7866 0061660 344.7126  15.2206 14.35296091744280
-COSMOS 2493 (SKRL-756 1)
-1 39490U 13078A   23361.62115588  .00003823  00000+0  36713-3 0  9993
-2 39490  82.4169  58.0719 0016640  44.9952 315.2613 14.92729454542859
-COSMOS 2494 (SKRL-756 2)
-1 39491U 13078B   23361.61705947  .00004566  00000+0  41967-3 0  9999
-2 39491  82.4166  50.5404 0020062  16.2162 343.9696 14.94448402543508
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+<title>404 - File Not Found.</title>
+<style type="text/css">
+<!--
+body{margin:0;font-size:.7em;font-family:Verdana, Arial, Helvetica, sans-serif;background:#EEEEEE;}
+fieldset{padding:0 15px 10px 15px;}
+h1{font-size:2.4em;margin:0;color:#FFF;}
+h2{font-size:1.7em;margin:0;color:#CC0000;}
+h3{font-size:1.2em;margin:10px 0 0 0;color:#000000;}
+#header{width:96%;margin:0 0 0 0;padding:6px 2% 6px 2%;font-family:"trebuchet MS", Verdana, sans-serif;color:#FFF;
+background-color:#555555;}
+#content{margin:0 0 0 2%;position:relative;}
+.content-container{background:#FFF;width:96%;margin-top:8px;padding:10px;position:relative;}
+-->
+</style>
+</head>
+<body>
+<div id="header"><h1>Server Error</h1></div>
+<div id="content">
+ <div class="content-container"><fieldset>
+  <h2>404 - File Not Found.</h2>
+  <h3>File not found for celestrak.org/NORAD/elements/radar.txt.</h3>
+  <h3>Please contact <a href="mailto:ts.kelso@celestrak.org">ts.kelso@celestrak.org</a> if you have other questions.</h3>
+ </fieldset></div>
+</div>
+</body>
+</html>

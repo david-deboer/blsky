@@ -1,18 +1,30 @@
-SAUDISAT 1C             
-1 27607U 02058C   23361.45271237  .00002155  00000+0  31127-3 0  9992
-2 27607  64.5562  32.0999 0045879 180.0157 180.0953 14.78118498130785
-SAUDISAT 2              
-1 28371U 04025F   23361.48042630  .00000684  00000+0  16862-3 0  9997
-2 28371  98.4606 327.1458 0025048 186.8661 173.2196 14.55206090 34380
-SAUDISAT 3              
-1 31118U 07012B   23361.41670178  .00000690  00000+0  12320-3 0  9998
-2 31118  98.0375 302.3875 0014050 215.9020 144.1243 14.69953993895059
-PISAT                   
-1 41784U 16059B   23361.55782050  .00001746  00000+0  33020-3 0  9990
-2 41784  97.8508  26.3890 0030489 199.3748 160.6300 14.65275618387375
-FLYING LAPTOP           
-1 42831U 17042G   23361.58288797  .00003182  00000+0  30298-3 0  9999
-2 42831  97.3795 187.6973 0012053 300.5122  59.4908 14.94006301351355
-SALSAT                  
-1 46495U 20068K   23361.43512555  .00006776  00000+0  41767-3 0  9992
-2 46495  97.7950 312.0524 0014626 176.1490 183.9854 15.10210586178217
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+<title>404 - File Not Found.</title>
+<style type="text/css">
+<!--
+body{margin:0;font-size:.7em;font-family:Verdana, Arial, Helvetica, sans-serif;background:#EEEEEE;}
+fieldset{padding:0 15px 10px 15px;}
+h1{font-size:2.4em;margin:0;color:#FFF;}
+h2{font-size:1.7em;margin:0;color:#CC0000;}
+h3{font-size:1.2em;margin:10px 0 0 0;color:#000000;}
+#header{width:96%;margin:0 0 0 0;padding:6px 2% 6px 2%;font-family:"trebuchet MS", Verdana, sans-serif;color:#FFF;
+background-color:#555555;}
+#content{margin:0 0 0 2%;position:relative;}
+.content-container{background:#FFF;width:96%;margin-top:8px;padding:10px;position:relative;}
+-->
+</style>
+</head>
+<body>
+<div id="header"><h1>Server Error</h1></div>
+<div id="content">
+ <div class="content-container"><fieldset>
+  <h2>404 - File Not Found.</h2>
+  <h3>File not found for celestrak.org/NORAD/elements/education.txt.</h3>
+  <h3>Please contact <a href="mailto:ts.kelso@celestrak.org">ts.kelso@celestrak.org</a> if you have other questions.</h3>
+ </fieldset></div>
+</div>
+</body>
+</html>
