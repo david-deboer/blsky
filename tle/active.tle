@@ -23,7 +23,7 @@ background-color:#555555;}
  <div class="content-container"><fieldset>
   <h2>404 - File Not Found.</h2>
   <h3>File not found for celestrak.org/NORAD/elements/active.txt.</h3>
-  <h3>Please contact <a href="mailto:ts.kelso@celestrak.org">ts.kelso@celestrak.org</a> if you have other questions.</h3>
+  <h3>Please contact <a href="mailto:ts.kelso@celestrak.org">ts.kelso@celestrak.org</a> if you have questions.</h3>
  </fieldset></div>
 </div>
 </body>
